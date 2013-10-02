@@ -11,7 +11,7 @@ package clases;
 public class Prueba {
 
     public Prueba() {
-        System.out.println("Hola Mundo");
+        System.out.println("Hola Mundo VIRONCHA");
     }
     
 }
