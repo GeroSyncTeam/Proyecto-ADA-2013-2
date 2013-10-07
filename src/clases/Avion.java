@@ -33,7 +33,16 @@ public class Avion extends Rectangle {
 
     private Avion() {
     }
-
+/**
+ * 
+ * @param tipo con el que se elige que tipo de avión crear
+ * @param x posición x
+ * @param y posición y
+ * @param ancho ancho del avión
+ * @param alto alto del avión
+ * 
+ * Se carganen memoria las rutas dde los sprites del objeto avión
+ */
     public Avion(int tipo, int x, int y, int ancho, int alto) {
         super(x, y, ancho, alto);
         rutasSpriteSheet = new String[21];
