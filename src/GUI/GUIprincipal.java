@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import org.lwjgl.LWJGLException;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -24,9 +25,9 @@ public class GUIprincipal extends StateBasedGame {
      * @throws SlickException Parametriza el AppGameContainery asigna ancho,
      * alto e icono de la ventana
      */
-    public GUIprincipal() throws SlickException {
+    public GUIprincipal() throws SlickException, LWJGLException {
         super("El aviador");
-        ventana = new AppGameContainer(this, 640, 480, false);
+        ventana = new AppGameContainer(this, 800, 600, false);
         ventana.setIcon("recursos/aeroplano/7.png");
         ventana.setShowFPS(false);
         ventana.start();
@@ -48,7 +49,7 @@ public class GUIprincipal extends StateBasedGame {
         addState(new Configuracion());
     }
 
-    public static void main(String args[]) throws SlickException {
+    public static void main(String args[]) throws SlickException, LWJGLException {
         new GUIprincipal();
     }
 }
