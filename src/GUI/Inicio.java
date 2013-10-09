@@ -7,11 +7,7 @@ package GUI;
 import java.awt.FontFormatException;
 import java.awt.Rectangle;
 import java.io.IOException;
-import org.lwjgl.input.Cursor;
-
 import org.newdawn.slick.*;
-import org.newdawn.slick.gui.TextField;
-
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
@@ -22,14 +18,15 @@ import org.newdawn.slick.util.ResourceLoader;
  */
 public class Inicio extends BasicGameState {
 
-    Rectangle rPlay, rMenu;
-   
-    Image fondo, play1, play2, menu1, menu2;
+    Rectangle rPlay, rDefinir, rCreditos;
+    Image fondo, play1, play2, definir1, definir2, creditos1, creditos2;
     boolean dibujarSobrePlay;
-    boolean dibujarSobreMenu;
-    int XBOTONES = 300;
-    int YPLAY = 450;
-    int YMUNU = 520;
+    boolean dibujarSobreDefinir;
+    boolean dibujarSobreCreditos;
+    int XBOTONES;
+    int YPLAY = 340;
+    int YDEFINIR = 410;
+    int YCREDITOS = 480;
 
     /**
      *
@@ -50,7 +47,7 @@ public class Inicio extends BasicGameState {
      */
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
-
+XBOTONES=container.getWidth()/6;
         fondo = new Image("recursos/fondos/fondo menu.jpg");
 
         play1 = new Image("recursos/fondos/play11.png");
@@ -58,12 +55,17 @@ public class Inicio extends BasicGameState {
         rPlay = new Rectangle(XBOTONES, YPLAY, 190, 50);
 
 
-        menu1 = new Image("recursos/fondos/menu11.png");
-        menu2 = new Image("recursos/fondos/menu12.png");
-        rMenu = new Rectangle(XBOTONES, YMUNU, 190, 50);
+        definir1 = new Image("recursos/fondos/definir1.png");
+        definir2 = new Image("recursos/fondos/definir2.png");
+        rDefinir = new Rectangle(XBOTONES, YDEFINIR, 300, 50);
+
+        creditos1 = new Image("recursos/fondos/creditos1.png");
+        creditos2 = new Image("recursos/fondos/creditos2.png");
+        rCreditos = new Rectangle(XBOTONES, YCREDITOS, 190, 50);// posible bug
 
         dibujarSobrePlay = false;
-        dibujarSobreMenu = false;
+        dibujarSobreDefinir = false;
+        dibujarSobreCreditos = false;
 
 
 
@@ -99,17 +101,24 @@ public class Inicio extends BasicGameState {
      */
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-fondo.draw(0, 0);
-        
+        fondo.draw(0, 0);
+
         if (dibujarSobrePlay) {
             play2.draw(XBOTONES, YPLAY);
         } else {
             play1.draw(XBOTONES, YPLAY);
         }
-        if (dibujarSobreMenu) {
-            menu2.draw(XBOTONES, YMUNU);
+        
+        if (dibujarSobreDefinir) {
+            definir2.draw(XBOTONES, YDEFINIR);
         } else {
-            menu1.draw(XBOTONES, YMUNU);
+            definir1.draw(XBOTONES, YDEFINIR);
+        }
+        
+        if (dibujarSobreCreditos) {
+            creditos2.draw(XBOTONES, YCREDITOS);
+        } else {
+            creditos1.draw(XBOTONES, YCREDITOS);
         }
 
     }
@@ -140,13 +149,22 @@ fondo.draw(0, 0);
             dibujarSobrePlay = false;
         }
 
-        if (pulsacion.intersects(rMenu)) {
-            dibujarSobreMenu = true;
+        if (pulsacion.intersects(rDefinir)) {
+            dibujarSobreDefinir = true;
+            if (container.getInput().isMousePressed(container.getInput().MOUSE_LEFT_BUTTON)) {
+                game.enterState(3);
+            }
+        } else {
+            dibujarSobreDefinir = false;
+        }
+        
+        if (pulsacion.intersects(rCreditos)) {
+            dibujarSobreCreditos = true;
             if (container.getInput().isMousePressed(container.getInput().MOUSE_LEFT_BUTTON)) {
                 game.enterState(1);
             }
         } else {
-            dibujarSobreMenu = false;
+            dibujarSobreCreditos = false;
         }
 //        }
 

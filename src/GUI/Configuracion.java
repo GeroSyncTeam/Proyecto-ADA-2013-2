@@ -5,8 +5,10 @@
  */
 package GUI;
 
+import java.awt.Rectangle;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -16,14 +18,19 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Gero
  */
 public class Configuracion extends BasicGameState {
-
+Rectangle rAtras;
+    Image fondo, atras1, atras2;
+    boolean dibujarSobreAtras;
+    int XATRAS = 10;
+    int YATRAS = 540;
+    
     /**
      *
      * @return 4 es el id que lo identifica
      */
     @Override
     public int getID() {
-        return 4;
+        return 3;
     }
 
     /**
@@ -36,6 +43,10 @@ public class Configuracion extends BasicGameState {
      */
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
+   atras1 = new Image("recursos/fondos/atras1.png");
+        atras2 = new Image("recursos/fondos/atras2.png");
+        rAtras = new Rectangle(XATRAS, YATRAS, 190, 50);
+        dibujarSobreAtras = false;
     }
 
     /**
@@ -50,6 +61,7 @@ public class Configuracion extends BasicGameState {
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         container.getGraphics().drawString("configuración", 100, 167);
+   cargarAtrasRender(container);
     }
 
     /**
@@ -63,5 +75,30 @@ public class Configuracion extends BasicGameState {
      */
     @Override
     public void update(GameContainer container, StateBasedGame game, int i) throws SlickException {
+  cargarAtrasUpdate(container, game);
+    }
+    
+     private void cargarAtrasUpdate(GameContainer container, StateBasedGame game) {
+        int x = container.getInput().getMouseX();
+        int y = container.getInput().getMouseY();
+        Rectangle pulsacion = new Rectangle(x, y, 2, 2);
+
+        if (pulsacion.intersects(rAtras)) {
+            dibujarSobreAtras = true;
+            if (container.getInput().isMousePressed(container.getInput().MOUSE_LEFT_BUTTON)) {
+                game.enterState(0);
+            }
+        } else {
+            dibujarSobreAtras = false;
+        }
+    }
+
+    private void cargarAtrasRender(GameContainer container) {
+        container.getGraphics().drawString("creditos", 100, 167);
+        if (dibujarSobreAtras) {
+            atras2.draw(XATRAS, YATRAS);
+        } else {
+            atras1.draw(XATRAS, YATRAS);
+        }
     }
 }

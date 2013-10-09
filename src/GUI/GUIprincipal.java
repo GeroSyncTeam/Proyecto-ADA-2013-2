@@ -43,7 +43,6 @@ public class GUIprincipal extends StateBasedGame {
     @Override
     public void initStatesList(GameContainer gc) throws SlickException {
         addState(new Inicio());
-        addState(new Menu());
         addState(new Juego());
         addState(new Creditos());
         addState(new Configuracion());
