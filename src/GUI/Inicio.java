@@ -47,7 +47,7 @@ public class Inicio extends BasicGameState {
      */
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
-XBOTONES=container.getWidth()/6;
+        XBOTONES = container.getWidth() / 6;
         fondo = new Image("recursos/fondos/fondo menu.jpg");
 
         play1 = new Image("recursos/fondos/play11.png");
@@ -66,9 +66,6 @@ XBOTONES=container.getWidth()/6;
         dibujarSobrePlay = false;
         dibujarSobreDefinir = false;
         dibujarSobreCreditos = false;
-
-
-
 
     }
 
@@ -101,26 +98,7 @@ XBOTONES=container.getWidth()/6;
      */
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        fondo.draw(0, 0);
-
-        if (dibujarSobrePlay) {
-            play2.draw(XBOTONES, YPLAY);
-        } else {
-            play1.draw(XBOTONES, YPLAY);
-        }
-        
-        if (dibujarSobreDefinir) {
-            definir2.draw(XBOTONES, YDEFINIR);
-        } else {
-            definir1.draw(XBOTONES, YDEFINIR);
-        }
-        
-        if (dibujarSobreCreditos) {
-            creditos2.draw(XBOTONES, YCREDITOS);
-        } else {
-            creditos1.draw(XBOTONES, YCREDITOS);
-        }
-
+        cargarBotonesRender();
     }
 
     /**
@@ -134,15 +112,39 @@ XBOTONES=container.getWidth()/6;
      */
     @Override
     public void update(GameContainer container, StateBasedGame game, int i) throws SlickException {
+    
+    cargarBotonesUpdate(container, game);}
 
-//        if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+    private void cargarBotonesRender() {
+        fondo.draw(0, 0);
+
+        if (dibujarSobrePlay) {
+            play2.draw(XBOTONES, YPLAY);
+        } else {
+            play1.draw(XBOTONES, YPLAY);
+        }
+
+        if (dibujarSobreDefinir) {
+            definir2.draw(XBOTONES, YDEFINIR);
+        } else {
+            definir1.draw(XBOTONES, YDEFINIR);
+        }
+
+        if (dibujarSobreCreditos) {
+            creditos2.draw(XBOTONES, YCREDITOS);
+        } else {
+            creditos1.draw(XBOTONES, YCREDITOS);
+        }
+    }
+
+    private void cargarBotonesUpdate(GameContainer container, StateBasedGame game) {
         int x = container.getInput().getMouseX();
         int y = container.getInput().getMouseY();
         Rectangle pulsacion = new Rectangle(x, y, 2, 2);
 
         if (pulsacion.intersects(rPlay)) {
             dibujarSobrePlay = true;
-            if (container.getInput().isMousePressed(container.getInput().MOUSE_LEFT_BUTTON)) {
+            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
                 game.enterState(2);
             }
         } else {
@@ -151,23 +153,20 @@ XBOTONES=container.getWidth()/6;
 
         if (pulsacion.intersects(rDefinir)) {
             dibujarSobreDefinir = true;
-            if (container.getInput().isMousePressed(container.getInput().MOUSE_LEFT_BUTTON)) {
+            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
                 game.enterState(3);
             }
         } else {
             dibujarSobreDefinir = false;
         }
-        
+
         if (pulsacion.intersects(rCreditos)) {
             dibujarSobreCreditos = true;
-            if (container.getInput().isMousePressed(container.getInput().MOUSE_LEFT_BUTTON)) {
+            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
                 game.enterState(1);
             }
         } else {
             dibujarSobreCreditos = false;
         }
-//        }
-
-
     }
 }

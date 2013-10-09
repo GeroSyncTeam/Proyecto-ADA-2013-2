@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -59,7 +60,7 @@ public class Creditos extends BasicGameState {
      */
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        cargarAtrasRender(container);
+        cargarAtrasRender();
     }
 
     /**
@@ -83,7 +84,7 @@ public class Creditos extends BasicGameState {
 
         if (pulsacion.intersects(rAtras)) {
             dibujarSobreAtras = true;
-            if (container.getInput().isMousePressed(container.getInput().MOUSE_LEFT_BUTTON)) {
+            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
                 game.enterState(0);
             }
         } else {
@@ -91,8 +92,7 @@ public class Creditos extends BasicGameState {
         }
     }
 
-    private void cargarAtrasRender(GameContainer container) {
-        container.getGraphics().drawString("creditos", 100, 167);
+    private void cargarAtrasRender() {
         if (dibujarSobreAtras) {
             atras2.draw(XATRAS, YATRAS);
         } else {
