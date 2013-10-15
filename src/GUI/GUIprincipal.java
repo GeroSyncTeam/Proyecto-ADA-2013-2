@@ -19,6 +19,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class GUIprincipal extends StateBasedGame {
 
     AppGameContainer ventana;
+    Juego juego;
 
     /**
      *
@@ -27,6 +28,7 @@ public class GUIprincipal extends StateBasedGame {
      */
     public GUIprincipal() throws SlickException, LWJGLException {
         super("El aviador");
+        juego = new Juego();
         ventana = new AppGameContainer(this, 800, 600, false);
         ventana.setIcon("recursos/aeroplano/7.png");
         ventana.setShowFPS(false);
@@ -42,10 +44,11 @@ public class GUIprincipal extends StateBasedGame {
      */
     @Override
     public void initStatesList(GameContainer gc) throws SlickException {
+        
         addState(new Inicio());
-        addState(new Juego());
+        addState(juego);
         addState(new Creditos());
-        addState(new Configuracion());
+        addState(new Configuracion(juego));
     }
 
     public static void main(String args[]) throws SlickException, LWJGLException {

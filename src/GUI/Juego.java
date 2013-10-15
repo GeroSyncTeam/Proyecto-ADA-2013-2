@@ -17,8 +17,15 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class Juego extends BasicGameState {
 
+    public int minutos;
+    
+
+    public Juego() {
+        minutos=2;
+    }
+
     /**
-     * 
+     *
      * @return 2 es el id que lo identifica
      */
     @Override
@@ -27,41 +34,42 @@ public class Juego extends BasicGameState {
     }
 
     /**
-     * 
+     *
      * @param container
      * @param sbg
-     * @throws SlickException 
-     * 
+     * @throws SlickException
+     *
      * Se cargan todos los recursos que se usaran
      */
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
+    
     }
 
     /**
-     * 
+     *
      * @param container
      * @param game
      * @param g
-     * @throws SlickException 
-     * 
+     * @throws SlickException
+     *
      * Se encarga de realizar el dibujado de los graficos
      */
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        container.getGraphics().drawString("juego", 100, 167);
+        container.getGraphics().drawString("juego "+minutos, 100, 167);
     }
-/**
- * 
- * @param container
- * @param game
- * @param i
- * @throws SlickException 
- * 
- * Registra los cambios de valores en el juego y los actualiza
- */
+
+    /**
+     *
+     * @param container
+     * @param game
+     * @param i
+     * @throws SlickException
+     *
+     * Registra los cambios de valores en el juego y los actualiza
+     */
     @Override
     public void update(GameContainer container, StateBasedGame game, int i) throws SlickException {
     }
-    
 }

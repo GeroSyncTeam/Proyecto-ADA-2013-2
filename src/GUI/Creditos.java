@@ -23,6 +23,9 @@ public class Creditos extends BasicGameState {
     boolean dibujarSobreAtras;
     int XATRAS = 10;
     int YATRAS = 540;
+    
+
+    
 
     /**
      *

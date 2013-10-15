@@ -8,14 +8,17 @@ package GUI;
 import java.awt.FontFormatException;
 import java.awt.Rectangle;
 import java.io.IOException;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.gui.TextField;
+
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
@@ -26,13 +29,26 @@ import org.newdawn.slick.util.ResourceLoader;
  */
 public class Configuracion extends BasicGameState {
 
-    TextField minutos;
-    Rectangle rAtras;
-    Image fondo, atras1, atras2, barraIzquierda;
+    Juego juego;
+    Rectangle pulsacion;
+    Font fuente;
+    Rectangle rAtras, rMas, rMenos;
+    Image fondo, atras1, atras2, barraIzquierda, marco;
+    SpriteSheet signos;
     boolean dibujarSobreAtras;
-    int XATRAS = 10;
-    int YATRAS = 540;
+    int XATRAS = 17;
+    int YATRAS = 560;
+    int XMAS = 170;
+    int XMENOS = 200;
+    int YMASMENOS = 50;
+    int ANCHOATRAS=80;
+    int ALTOATRAS=25;
 
+    
+
+    public Configuracion(Juego juego) {
+        this.juego = juego;
+    }
     /**
      *
      * @return 4 es el id que lo identifica
@@ -41,7 +57,6 @@ public class Configuracion extends BasicGameState {
     public int getID() {
         return 3;
     }
-    
 
     /**
      *
@@ -53,13 +68,37 @@ public class Configuracion extends BasicGameState {
      */
     @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {  
-        
+        pulsacion = new Rectangle(2, 2);
+        fuente = cargarFuente(container, 23f);
         atras1 = new Image("recursos/fondos/atras1.png");
         atras2 = new Image("recursos/fondos/atras2.png");
-        barraIzquierda = new Image("recursos/fondos/barra izquierda.jpg");
-        rAtras = new Rectangle(XATRAS, YATRAS, 150, 30);
-        minutos = new TextField(container, cargarFuente(container, 25f), 30, 50, 60, 25);
-        
+        barraIzquierda = new Image("recursos/fondos/barra izquierda2.jpg");
+        marco = new Image("recursos/fondos/marco mapa.png");
+        signos = new SpriteSheet("recursos/fondos/signos.png", 20, 20);
+        rAtras = new Rectangle(XATRAS, YATRAS, ANCHOATRAS, ALTOATRAS);
+        rMas = new Rectangle(XMAS, YMASMENOS, 20, 20);
+        rMenos = new Rectangle(XMENOS, YMASMENOS, 20, 20);
+
+        dibujarSobreAtras = false;
+
+    }
+    
+    @Override
+    public void enter(GameContainer container, StateBasedGame game) throws SlickException{
+        init(container, game);
+    }
+    
+    @Override
+    public void leave(GameContainer container, StateBasedGame game) throws SlickException {       
+        pulsacion = null;
+        fuente = null;
+        atras1 = null;
+        atras2 = null;
+        barraIzquierda = null;
+        signos = null;
+        rAtras = null;
+        rMas = null;
+        rMenos = null;
         dibujarSobreAtras = false;
     }
 
@@ -73,21 +112,38 @@ public class Configuracion extends BasicGameState {
      * Se encarga de realizar el dibujado de los graficos
      */
     @Override
-    public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {      
-        barraIzquierda.draw(0, 0);
-        
-        g.setFont(cargarFuente(container,25f));
+    public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+        barraIzquierda.draw(0, 0, 250, 600);
+        marco.draw(250, 0);
+        int x1=300,y1=75,aumento=0;
+        for (int i = 0; i <= 15; i++) {
+            g.drawLine(x1+aumento, y1, x1+aumento, 525);
+            g.drawLine(x1, y1+aumento, 750, y1+aumento);
+            aumento+=30;
+            
+        }
+        g.setFont(fuente);
         g.setColor(Color.lightGray);
-        g.drawString("Definir Tiempo", 26, 20);
+        g.drawString("Tiempo De Juego", 18, 20);
         g.setColor(Color.white);
-        g.drawString("Definir Tiempo", 27, 20);
-        
+        g.drawString("Tiempo De Juego", 19, 20);
         g.setColor(Color.lightGray);
-        g.drawString("minutos", 100, 50);
+        g.drawString(juego.minutos + " minutos", 25, 50);
         g.setColor(Color.white);
-        g.drawString("minutos", 101, 50);
-        minutos.setBackgroundColor(Color.red);
-        minutos.render(container, g);
+        g.drawString(juego.minutos + " minutos", 25, 50);
+        signos.getSprite(0, 0).draw(XMAS, YMASMENOS);
+        signos.getSprite(0, 1).draw(XMENOS, YMASMENOS);
+        g.setColor(Color.lightGray);
+        g.drawString("Aeropuertos", 40, 120);
+        g.setColor(Color.white);
+        g.drawString("Aeropuertos", 41, 120);
+        g.drawRoundRect(28, 350, 90, 90, 0);
+        g.drawRoundRect(28, 450, 90, 90, 0);
+        g.drawRoundRect(130, 350, 90, 90, 0);
+        g.drawRoundRect(130, 450, 90, 90, 0);
+        
+
+
         cargarAtrasRender();
 //        g.drawLine(250,0, 250,800);
     }
@@ -104,16 +160,19 @@ public class Configuracion extends BasicGameState {
     @Override
     public void update(GameContainer container, StateBasedGame game, int i) throws SlickException {
         cargarAtrasUpdate(container, game);
+        masUpdate(container);
+        menosUpdate(container);
+        
     }
-
+    
     private void cargarAtrasUpdate(GameContainer container, StateBasedGame game) {
         int x = container.getInput().getMouseX();
         int y = container.getInput().getMouseY();
-        Rectangle pulsacion = new Rectangle(x, y, 2, 2);
+        pulsacion.setBounds(x, y, 2, 2);
 
         if (pulsacion.intersects(rAtras)) {
             dibujarSobreAtras = true;
-            if (container.getInput().isMousePressed(container.getInput().MOUSE_LEFT_BUTTON)) {
+            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
                 game.enterState(0);
             }
         } else {
@@ -121,22 +180,51 @@ public class Configuracion extends BasicGameState {
         }
     }
 
+    private void masUpdate(GameContainer container) {
+        int x = container.getInput().getMouseX();
+        int y = container.getInput().getMouseY();
+        pulsacion.setBounds(x, y, 2, 2);
+
+        if (pulsacion.intersects(rMas)) {
+            
+            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+               if(juego.minutos<10)
+                juego.minutos++;
+            }
+        } 
+    }
+    
+    private void menosUpdate(GameContainer container) {
+        int x = container.getInput().getMouseX();
+        int y = container.getInput().getMouseY();
+        pulsacion.setBounds(x, y, 2, 2);
+
+        if (pulsacion.intersects(rMenos)) {
+            
+            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+               if(juego.minutos>2)
+                juego.minutos--;
+            }
+        } 
+    }
+
     private void cargarAtrasRender() {
 
         if (dibujarSobreAtras) {
-            atras2.draw(XATRAS, YATRAS,150,30);
+            
+            atras2.draw(XATRAS, YATRAS, ANCHOATRAS, ALTOATRAS);
         } else {
-            atras1.draw(XATRAS, YATRAS,150,30);
+            atras1.draw(XATRAS, YATRAS, ANCHOATRAS, ALTOATRAS);
         }
     }
 
+
     private Font cargarFuente(GameContainer container, float tamaño) {
         try {
-            TrueTypeFont font2;
             java.io.InputStream inputStream = ResourceLoader.getResourceAsStream("recursos/Action Man Shaded.ttf");
             java.awt.Font awtFont2 = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, inputStream);
             awtFont2 = awtFont2.deriveFont(tamaño); // set font size
-            return font2 = new TrueTypeFont(awtFont2, false);
+            return new TrueTypeFont(awtFont2, false);
         } catch (FontFormatException | IOException e) {
             return container.getDefaultFont();
         }
