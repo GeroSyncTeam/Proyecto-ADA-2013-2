@@ -5,11 +5,11 @@
  */
 package GUI;
 
+import clases.Aeropuerto;
 import java.awt.FontFormatException;
 import java.awt.Rectangle;
 import java.io.IOException;
-import java.util.LinkedList;
-
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
@@ -19,7 +19,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.TrueTypeFont;
-
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
@@ -32,12 +31,12 @@ public class Configuracion extends BasicGameState {
 
     Juego juego;
     Font fuente;
-    Rectangle rAtras, rMas, rMenos, pulsacion, rAeropuerto1, rCuadricula;
-    Image fondo, atras1, atras2, barraIzquierda, marco, aeropuerto1, imgTemporal;
-    LinkedList<Imagen> aeropuertosMapa;
+    Rectangle rAtras, rMas, rMenos, pulsacion, rAeropuerto1, rCuadricula, rBorrador;
+    Image atras1, atras2, barraIzquierda, marco, aeropuerto1, imgTemporal;
+    Image borrador;
     SpriteSheet signos;
     String rutaImagenTemporal;
-    boolean dibujarSobreAtras, dibujartemporal, pintarAeropuerto;
+    boolean dibujarSobreAtras, dibujartemporal, pintarAeropuerto, pintarBorradorTemporal;
     int XATRAS = 17;
     int YATRAS = 560;
     int XMAS = 170;
@@ -49,6 +48,9 @@ public class Configuracion extends BasicGameState {
     int pulsacionY;
     int XA1 = 28;
     int YA1 = 350;
+    int XBORRADOR = 475;
+    int YBORRADOR = 520;
+    int tipoAeropuerto = -1;
     //----------------------------------
 
     public Configuracion(Juego juego) {
@@ -64,6 +66,10 @@ public class Configuracion extends BasicGameState {
         return 3;
     }
 
+    @Override
+    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+    }
+
     /**
      *
      * @param container
@@ -72,9 +78,8 @@ public class Configuracion extends BasicGameState {
      *
      * Se cargan todos los recursos que se usaran
      */
-    @Override
-    public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
-        aeropuertosMapa = new LinkedList<Imagen>();
+    public void init2(GameContainer container, StateBasedGame sbg) throws SlickException {
+
         pulsacion = new Rectangle(2, 2);
         //------ Carga la fuente ---------
         try {
@@ -86,7 +91,7 @@ public class Configuracion extends BasicGameState {
             fuente = container.getDefaultFont();
         }
         //----------------------------------
-
+        borrador = new Image("recursos/fondos/borrador.png");
         atras1 = new Image("recursos/fondos/atras1.png");
         atras2 = new Image("recursos/fondos/atras2.png");
         barraIzquierda = new Image("recursos/fondos/barra izquierda2.jpg");
@@ -98,6 +103,7 @@ public class Configuracion extends BasicGameState {
         rMenos = new Rectangle(XMENOS, YMASMENOS, 20, 20);
         rCuadricula = new Rectangle(300, 60, 390, 390);
         rAeropuerto1 = new Rectangle(XA1, YA1, 90, 90);
+        rBorrador = new Rectangle(XBORRADOR, YBORRADOR, 100, 60);
         dibujarSobreAtras = false;
 
 
@@ -106,25 +112,24 @@ public class Configuracion extends BasicGameState {
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
-        init(container, game);
+        init2(container, game);
     }
 
     @Override
     public void leave(GameContainer container, StateBasedGame game) throws SlickException {
-        aeropuertosMapa=null;
         pulsacion = null;
         fuente = null;
         atras1 = null;
         atras2 = null;
         barraIzquierda = null;
-        marco=null;
-        rAeropuerto1=null;
+        marco = null;
+        rAeropuerto1 = null;
         signos = null;
         rAtras = null;
         rMas = null;
         rMenos = null;
-        rCuadricula=null;
-        rAeropuerto1=null;
+        rCuadricula = null;
+        rAeropuerto1 = null;
     }
 
     /**
@@ -147,14 +152,15 @@ public class Configuracion extends BasicGameState {
             aumento += 30;
         }
         //------ Pinta aeropuertos del mapa 
-        for (int i = 0; i < aeropuertosMapa.size(); i++) {
-            int x= aeropuertosMapa.get(i).getX();
-            int y= aeropuertosMapa.get(i).getY();
-            aeropuertosMapa.get(i).getImagen().draw(x, y);
+        for (int i = 0; i < juego.aeropuertosMapa.size(); i++) {
+            int x = juego.aeropuertosMapa.get(i).x;
+            int y = juego.aeropuertosMapa.get(i).y;
+            juego.aeropuertosMapa.get(i).getImagen().draw(x, y);
         }
         //----------------------------------
         barraIzquierda.draw(0, 0, 250, 600);
         marco.draw(250, 0);
+        borrador.draw(XBORRADOR, YBORRADOR, 100, 60);
         g.setFont(fuente);
         g.setColor(Color.lightGray);
         g.drawString("Tiempo De Juego", 18, 20);
@@ -179,15 +185,21 @@ public class Configuracion extends BasicGameState {
         g.setColor(Color.white);
         //------ Pintar imagen temporal------       
         if (pintarAeropuerto) {
-            imgTemporal.setAlpha(10f);
+
             imgTemporal.draw(container.getInput().getMouseX(), container.getInput().getMouseY(), 90, 90);
         }
-        //------ Pinta botón atras------
+        if (pintarBorradorTemporal) {
+
+            imgTemporal.draw(container.getInput().getMouseX() - 5, container.getInput().getMouseY() - 5, 50, 50);
+        }
+        //------ Pinta botón atrás ----------
         if (dibujarSobreAtras) {
             atras2.draw(XATRAS, YATRAS, ANCHOATRAS, ALTOATRAS);
         } else {
             atras1.draw(XATRAS, YATRAS, ANCHOATRAS, ALTOATRAS);
         }
+        //------ pintar Borrador ------------
+
         //-----------------------------------
 
     }
@@ -233,12 +245,23 @@ public class Configuracion extends BasicGameState {
                 }
             }
         }
-        //  Cargar Imagen temporal de mouse 
+        //  Cargar Aeropuerto temporal de mouse aeropuerto
         if (pulsacion.intersects(rAeropuerto1)) {
-            rutaImagenTemporal="recursos/fondos/a1.jpg";
+            rutaImagenTemporal = "recursos/fondos/a1.jpg";
             if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+                pintarBorradorTemporal = false;
+                imgTemporal = null;
                 imgTemporal = new Image(rutaImagenTemporal);
                 pintarAeropuerto = true;
+                tipoAeropuerto=1; //esta linea es importante cambia el tipo de aeropuerto
+            }
+        }//  Cargar Aeropuerto temporal de mouse borrador
+        if (pulsacion.intersects(rBorrador) && juego.aeropuertosMapa.size() > 0) {
+            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+                pintarAeropuerto = false;
+                imgTemporal = null;
+                imgTemporal = new Image("recursos/fondos/borrador.png");
+                pintarBorradorTemporal = true;
             }
         }
         // Pintar aeropuerto en la cuadricula
@@ -255,11 +278,23 @@ public class Configuracion extends BasicGameState {
                     }
                 }
                 pintarAeropuerto = false;
-                imgTemporal = null;            
-                aeropuertosMapa.add(new Imagen(rutaImagenTemporal, x, y));            
+                imgTemporal = null;
+                juego.aeropuertosMapa.add(new Aeropuerto(rutaImagenTemporal,tipoAeropuerto, x, y));
+            }
+            // Borrar aeropuerto de la cuadricula
+            if (container.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) && pintarBorradorTemporal) {
+                boolean buscar = true;
+                int j = 0;
+                while (j < juego.aeropuertosMapa.size() && buscar) {
+                    if (juego.aeropuertosMapa.get(j).intersects(pulsacion)) {
+                        juego.aeropuertosMapa.remove(j);
+                        pintarBorradorTemporal = false;
+                        imgTemporal = null;
+                        buscar = false;
+                    }
+                    j++;
+                }
             }
         }
-        //----------------------------------
-
     }
 }

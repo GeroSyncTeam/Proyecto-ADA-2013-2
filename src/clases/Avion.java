@@ -5,6 +5,10 @@
 package clases;
 
 import java.awt.Rectangle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 /**
  *
@@ -29,10 +33,9 @@ public class Avion extends Rectangle {
     public int ganancia;
 
    
-    public String[] rutasSpriteSheet;
+    public Image[] rutasSpriteSheet;
 
-    private Avion() {
-    }
+    
 /**
  * 
  * @param tipo con el que se elige que tipo de avión crear
@@ -45,7 +48,7 @@ public class Avion extends Rectangle {
  */
     public Avion(int tipo, int x, int y, int ancho, int alto) {
         super(x, y, ancho, alto);
-        rutasSpriteSheet = new String[21];
+        rutasSpriteSheet = new Image[21];
         cargarSpriteSheet(tipo);
     }
 
@@ -85,7 +88,11 @@ public class Avion extends Rectangle {
                 break;
         }
         for (int i = 0; i < 21; i++) {
-            rutasSpriteSheet[i] = ruta.concat("" + i + ".png");
+            try {
+                rutasSpriteSheet[i] = new Image(ruta.concat("" + i + ".png"));
+            } catch (SlickException ex) {
+                Logger.getLogger(Avion.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }

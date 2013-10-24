@@ -23,9 +23,6 @@ public class Creditos extends BasicGameState {
     boolean dibujarSobreAtras;
     int XATRAS = 10;
     int YATRAS = 540;
-    
-
-    
 
     /**
      *
@@ -44,8 +41,7 @@ public class Creditos extends BasicGameState {
      *
      * Se cargan todos los recursos que se usaran
      */
-    @Override
-    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+    public void init2(GameContainer gc, StateBasedGame sbg) throws SlickException {
         atras1 = new Image("recursos/fondos/atras1.png");
         atras2 = new Image("recursos/fondos/atras2.png");
         rAtras = new Rectangle(XATRAS, YATRAS, 190, 50);
@@ -101,5 +97,22 @@ public class Creditos extends BasicGameState {
         } else {
             atras1.draw(XATRAS, YATRAS);
         }
+    }
+
+    @Override
+    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+    }
+
+    public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+        init2(container, game);
+    }
+
+    @Override
+    public void leave(GameContainer container, StateBasedGame game) throws SlickException {
+        atras1 = null;
+        atras2 = null;
+        fondo = null;
+        rAtras = null;
+
     }
 }

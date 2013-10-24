@@ -25,7 +25,7 @@ public class PruebasGraficas extends BasicGame {
 
     public PruebasGraficas() {
         super("Pruebas");
-        s = new Helicoptero (100, 100, 100, 100);
+        s = new Helicoptero(100, 100, 100, 100);
         try {
             formulario = new AppGameContainer(this);
             formulario.setDisplayMode(500, 500, false);
@@ -38,7 +38,14 @@ public class PruebasGraficas extends BasicGame {
 
     public static void main(String args[]) {
 
-        new PruebasGraficas();
+//        new PruebasGraficas();
+        int[] nodos = new int[225];
+        for (int i = 0; i < nodos.length; i++) {
+            nodos[i] = i;
+        }
+        AlgoritmoDijkstra mapa = new AlgoritmoDijkstra(nodos);
+        mapa.modificarDistancias(18);
+        System.out.println(mapa.encontrarRutaMinimaDijkstra(5, 30));
     }
 
     @Override

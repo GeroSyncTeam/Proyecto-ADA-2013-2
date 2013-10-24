@@ -45,7 +45,6 @@ public class Inicio extends BasicGameState {
      *
      * Se cargan todos los recursos que se usaran
      */
-    @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
         XBOTONES = container.getWidth() / 6;
         fondo = new Image("recursos/fondos/fondo menu.jpg");
@@ -112,8 +111,9 @@ public class Inicio extends BasicGameState {
      */
     @Override
     public void update(GameContainer container, StateBasedGame game, int i) throws SlickException {
-    
-    cargarBotonesUpdate(container, game);}
+
+        cargarBotonesUpdate(container, game);
+    }
 
     private void cargarBotonesRender() {
         fondo.draw(0, 0);
@@ -168,5 +168,25 @@ public class Inicio extends BasicGameState {
         } else {
             dibujarSobreCreditos = false;
         }
+    }
+
+
+    @Override
+    public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+        init(container, game);
+    }
+
+    @Override
+    public void leave(GameContainer container, StateBasedGame game) throws SlickException {
+        fondo = null;
+        play1 = null;
+        play2 = null;
+        definir1 = null;
+        definir2 = null;
+        creditos1 = null;
+        creditos2 = null;
+        rPlay = null;
+        rDefinir = null;
+        rCreditos = null;
     }
 }
