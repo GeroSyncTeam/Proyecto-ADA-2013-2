@@ -9,7 +9,6 @@ import clases.Aeropuerto;
 import java.awt.FontFormatException;
 import java.awt.Rectangle;
 import java.io.IOException;
-import java.util.concurrent.CopyOnWriteArrayList;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;

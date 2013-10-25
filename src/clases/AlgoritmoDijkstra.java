@@ -18,92 +18,128 @@ import java.util.Vector;
 public class AlgoritmoDijkstra {
 
     public int tiposDeSector[];
-    int[] nodos;  // Letras de identificación de nodo
+   public int[] nodos;  // Letras de identificación de nodo
     int[][] grafo;  // Matriz de distancias entre nodos
     String rutaMasCorta;                           // distancia más corta
     int longitudMasCorta = Integer.MAX_VALUE;   // ruta más corta
     List<Nodo> listos = null;                        // nodos revisados Dijkstra
 
-    // construye el grafo con la serie de identificadores de nodo en una cadena
-    public AlgoritmoDijkstra(int[] nodos) {
-        this.nodos = nodos;
+    /**
+     *
+     * @param tiposDeSector construye el grafo
+     */
+    public AlgoritmoDijkstra() {
+        this.tiposDeSector = new int[225];
+        this.nodos = new int[225];
+        for (int i = 0; i < nodos.length; i++) {
+            nodos[i] = i;
+            tiposDeSector[i]=0;
+        }
         grafo = new int[this.nodos.length][this.nodos.length];
         enlazarGrafo();
     }
-
-    public AlgoritmoDijkstra(int[] nodos, int[] tiposDeSector) {
-        this.nodos = nodos;
-        grafo = new int[this.nodos.length][this.nodos.length];
-        this.tiposDeSector = tiposDeSector;
-        enlazarGrafo();
+    
+    public void reiniciarTiposSector(){
+        for (int i = 0; i < nodos.length; i++) {
+            
+            tiposDeSector[i]=0;
+        }
     }
 //tiposDeSector[i + 1] 
 
-    private void enlazarGrafo() {
-
+    public void enlazarGrafo() {
         for (int nodo = 0; nodo < 225; nodo++) {
             //agrega nodo a la izquierda
             try {
-                if(tiposDeSector[nodo]!= 0 ){
-                    //aca va la logica para reasignar valores de distancia
-                }
                 agregarRuta(nodo, nodo - 1, 1);
-                agregarRuta(nodo - 1, nodo, 1);
-                
+                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                    agregarRuta(nodo - 1, nodo, Integer.MAX_VALUE);
+                } else {
+                    agregarRuta(nodo - 1, nodo, 1);
+                }
             } catch (Exception e) {
             }
             //agrega nodo a la derecha
             try {
                 agregarRuta(nodo, nodo + 1, 1);
-                agregarRuta(nodo + 1, nodo, 1);
+                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                    agregarRuta(nodo + 1, nodo, Integer.MAX_VALUE);
+                } else {
+                    agregarRuta(nodo + 1, nodo, 1);
+                }
             } catch (Exception e) {
             }
             //agrega nodo arriba
             try {
                 agregarRuta(nodo, nodo - 15, 1);
-                agregarRuta(nodo - 15, nodo, 1);
+                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                    agregarRuta(nodo - 15, nodo, Integer.MAX_VALUE);
+                } else {
+                    agregarRuta(nodo - 15, nodo, 1);
+                }
             } catch (Exception e) {
             }
             //agrega nodo abajo
             try {
                 agregarRuta(nodo, nodo + 15, 1);
-                agregarRuta(nodo + 15, nodo, 1);
+                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                    agregarRuta(nodo + 15, nodo, Integer.MAX_VALUE);
+                } else {
+                    agregarRuta(nodo + 15, nodo, 1);
+                }
             } catch (Exception e) {
             }
             //agrega nodo izquierda-arriba
             try {
                 agregarRuta(nodo, nodo - 16, 1);
-                agregarRuta(nodo - 16, nodo, 1);
+                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                    agregarRuta(nodo - 16, nodo, Integer.MAX_VALUE);
+                } else {
+                    agregarRuta(nodo - 16, nodo, 1);
+                }
             } catch (Exception e) {
             }
             //agrega nodo derecha-arriba
             try {
                 agregarRuta(nodo, nodo - 14, 1);
-                agregarRuta(nodo - 14, nodo, 1);
+                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                    agregarRuta(nodo - 14, nodo, Integer.MAX_VALUE);
+                } else {
+                    agregarRuta(nodo - 14, nodo, 1);
+                }
             } catch (Exception e) {
             }
             //agrega nodo izquierda-abajo
             try {
                 agregarRuta(nodo, nodo + 14, 1);
-                agregarRuta(nodo + 14, nodo, 1);
+                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                    agregarRuta(nodo + 14, nodo, Integer.MAX_VALUE);
+                } else {
+                    agregarRuta(nodo + 14, nodo, 1);
+                }
             } catch (Exception e) {
             }
             //agrega nodo derecha-abajo
             try {
                 agregarRuta(nodo, nodo + 16, 1);
-                agregarRuta(nodo + 16, nodo, 1);
+                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                    agregarRuta(nodo + 16, nodo, Integer.MAX_VALUE);
+                } else {
+                    agregarRuta(nodo + 16, nodo, 1);
+                }
             } catch (Exception e) {
             }
         }
     }
-/**
- * 
- * @param nodo 
- * Modifica el valor de los caminos que se unen con el parametro nodo
- *  
- */
+
+    /**
+     *
+     * @param nodo Modifica el valor de los caminos que se unen con el parametro
+     * nodo
+     *
+     */
     public void modificarDistancias(int nodo) {
-        
+
         //agrega nodo a la izquierda
         try {
 //            agregarRuta(nodo, nodo - 1, 9);

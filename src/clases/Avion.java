@@ -14,7 +14,7 @@ import org.newdawn.slick.SlickException;
  *
  * @author Gero
  * @version 1.0
- * 
+ *
  */
 public class Avion extends Rectangle {
 
@@ -31,35 +31,33 @@ public class Avion extends Rectangle {
     public int altura;
     public int velocidad;
     public int ganancia;
-
-   
+    public int tipo;
     public Image[] rutasSpriteSheet;
 
-    
-/**
- * 
- * @param tipo con el que se elige que tipo de avión crear
- * @param x posición x
- * @param y posición y
- * @param ancho ancho del avión
- * @param alto alto del avión
- * 
- * Se carganen memoria las rutas dde los sprites del objeto avión
- */
+    /**
+     *
+     * @param tipo con el que se elige que tipo de avión crear
+     * @param x posición x
+     * @param y posición y
+     * @param ancho ancho del avión
+     * @param alto alto del avión
+     *
+     * Se carganen memoria las rutas dde los sprites del objeto avión
+     */
     public Avion(int tipo, int x, int y, int ancho, int alto) {
         super(x, y, ancho, alto);
+        this.tipo = tipo;
         rutasSpriteSheet = new Image[21];
-        cargarSpriteSheet(tipo);
+        cargarSpriteSheet();
     }
 
     /**
      * @param tipo define el tipo de avion a crear
-     * 
-     * En este método se cargan las rutas de las imagenes del avion y se
-     * asignan los valores de las variables altura, velocidad y ganancia 
+     *
+     * En este método se cargan las rutas de las imagenes del avion y se asignan
+     * los valores de las variables altura, velocidad y ganancia
      */
-
-    private void cargarSpriteSheet(int tipo) {
+    private void cargarSpriteSheet() {
         String ruta = "";
         switch (tipo) {
             case 0:
