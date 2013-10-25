@@ -30,12 +30,19 @@ public class Configuracion extends BasicGameState {
 
     Juego juego;
     Font fuente;
-    Rectangle rAtras, rMas, rMenos, pulsacion, rAeropuerto1, rCuadricula, rBorrador;
-    Image atras1, atras2, barraIzquierda, marco, aeropuerto1, imgTemporal;
-    Image borrador;
+    Rectangle rAtras, rMas, rMenos, pulsacion, rCuadricula, rBorrador;
+    Rectangle rAeropuerto1, rAeropuerto2, rAeropuerto3, rAeropuerto4;
+    Image atras1, atras2, barraIzquierda, marco, imgTemporal;
+    Image borrador, aeropuerto1, aeropuerto2, aeropuerto3, aeropuerto4;
     SpriteSheet signos;
     String rutaImagenTemporal;
-    boolean dibujarSobreAtras, dibujartemporal, pintarAeropuerto, pintarBorradorTemporal;
+    boolean dibujarSobreAtras, pintarAeropuerto, pintarBorradorTemporal, botonMas, botonMenos;
+    boolean aeropuerto1Booleano;
+    boolean aeropuerto2Booleano;
+    boolean aeropuerto3Booleano;
+    boolean aeropuerto4Booleano;
+    boolean borradorBooleano;
+    boolean cuadriculaBooleano;
     int XATRAS = 17;
     int YATRAS = 560;
     int XMAS = 170;
@@ -47,6 +54,12 @@ public class Configuracion extends BasicGameState {
     int pulsacionY;
     int XA1 = 28;
     int YA1 = 350;
+    int XA2 = 28;
+    int YA2 = 450;
+    int XA3 = 130;
+    int YA3 = 350;
+    int XA4 = 130;
+    int YA4 = 450;
     int XBORRADOR = 475;
     int YBORRADOR = 520;
     int tipoAeropuerto = -1;
@@ -96,12 +109,18 @@ public class Configuracion extends BasicGameState {
         barraIzquierda = new Image("recursos/fondos/barra izquierda2.jpg");
         marco = new Image("recursos/fondos/marco mapa.png");
         aeropuerto1 = new Image("recursos/fondos/a1.jpg");
+        aeropuerto2 = new Image("recursos/fondos/a2.jpg");
+        aeropuerto3 = new Image("recursos/fondos/a3.jpg");
+        aeropuerto4 = new Image("recursos/fondos/a4.jpg");
         signos = new SpriteSheet("recursos/fondos/signos.png", 20, 20);
         rAtras = new Rectangle(XATRAS, YATRAS, ANCHOATRAS, ALTOATRAS);
         rMas = new Rectangle(XMAS, YMASMENOS, 20, 20);
         rMenos = new Rectangle(XMENOS, YMASMENOS, 20, 20);
         rCuadricula = new Rectangle(300, 60, 390, 390);
         rAeropuerto1 = new Rectangle(XA1, YA1, 90, 90);
+        rAeropuerto2 = new Rectangle(XA2, YA2, 90, 90);
+        rAeropuerto3 = new Rectangle(XA3, YA3, 90, 90);
+        rAeropuerto4 = new Rectangle(XA4, YA4, 90, 90);
         rBorrador = new Rectangle(XBORRADOR, YBORRADOR, 100, 60);
         dibujarSobreAtras = false;
 
@@ -176,11 +195,14 @@ public class Configuracion extends BasicGameState {
         g.setColor(Color.white);
         g.drawString("Aeropuertos", 41, 120);
         g.setColor(Color.blue);
-        aeropuerto1.draw(28, 350, 90, 90);
+        aeropuerto1.draw(XA1, YA1, 90, 90);
+        aeropuerto2.draw(XA2, YA2, 90, 90);
+        aeropuerto3.draw(XA3, YA3, 90, 90);
+        aeropuerto4.draw(XA4, YA4, 90, 90);
         g.drawRoundRect(28, 350, 90, 90, 2);
-        g.drawRoundRect(28, 450, 90, 90, 0);
-        g.drawRoundRect(130, 350, 90, 90, 0);
-        g.drawRoundRect(130, 450, 90, 90, 0);
+        g.drawRoundRect(28, 450, 90, 90, 2);
+        g.drawRoundRect(130, 350, 90, 90, 2);
+        g.drawRoundRect(130, 450, 90, 90, 2);
         g.setColor(Color.white);
         //------ Pintar imagen temporal------       
         if (pintarAeropuerto) {
@@ -218,54 +240,115 @@ public class Configuracion extends BasicGameState {
         pulsacionX = container.getInput().getMouseX();
         pulsacionY = container.getInput().getMouseY();
         pulsacion.setBounds(pulsacionX, pulsacionY, 2, 2);
-        //------ Carga el botón Atrás ------
+        //------ Carga el botón Atrás ------------------------------------------
         if (pulsacion.intersects(rAtras)) {
             dibujarSobreAtras = true;
-            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-                game.enterState(0);
-            }
         } else {
             dibujarSobreAtras = false;
         }
-        //------ Carga el botón mas --------
+        //------ Carga el botón mas --------------------------------------------
         if (pulsacion.intersects(rMas)) {
+            botonMas = true;
+        } else {
+            botonMas = false;
+        }
+        //-- Carga el botón menos ----------------------------------------------
+        if (pulsacion.intersects(rMenos)) {
+            botonMenos = true;
+        } else {
+            botonMenos = false;
+        }
+        //-- Cargar Aeropuerto 1 como temporal en el mouse ---------------------
+        if (pulsacion.intersects(rAeropuerto1)) {
+            aeropuerto1Booleano = true;
+        } else {
+            aeropuerto1Booleano = false;
+        }
+        //-- Cargar Aeropuerto 2 como temporal en el mouse ---------------------
+        if (pulsacion.intersects(rAeropuerto2)) {
+            aeropuerto2Booleano = true;
+        } else {
+            aeropuerto2Booleano = false;
+        }
+        //-- Cargar Aeropuerto 3 como temporal en el mouse ---------------------
+        if (pulsacion.intersects(rAeropuerto3)) {
+            aeropuerto3Booleano = true;
+        } else {
+            aeropuerto3Booleano = false;
+        }
+        //-- Cargar Aeropuerto 4 como temporal en el mouse ---------------------
+        if (pulsacion.intersects(rAeropuerto4)) {
+            aeropuerto4Booleano = true;
+        } else {
+            aeropuerto4Booleano = false;
+        }
+        //-- Cargar Aeropuerto temporal de mouse borrador ----------------------
+        if (pulsacion.intersects(rBorrador) && juego.aeropuertosMapa.size() > 0) {
+            borradorBooleano = true;
+        } else {
+            borradorBooleano = false;
+        }
+        // eventos que pasan en la cuadricula
+        if (pulsacion.intersects(rCuadricula)) {
+            cuadriculaBooleano = true;
+        } else {
+            cuadriculaBooleano = false;
+        }
 
-            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+// Evento de click--------------------------------------------------------------
+        if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+            if (dibujarSobreAtras) {
+                game.enterState(0);
+            }
+            if (botonMas) {
                 if (juego.minutos < 10) {
                     juego.minutos++;
                 }
             }
-        }
-        //------ Carga el botón menos ------
-        if (pulsacion.intersects(rMenos)) {
-            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+            if (botonMenos) {
                 if (juego.minutos > 2) {
                     juego.minutos--;
                 }
             }
-        }
-        //  Cargar Aeropuerto temporal de mouse aeropuerto
-        if (pulsacion.intersects(rAeropuerto1)) {
-            rutaImagenTemporal = "recursos/fondos/a1.jpg";
-            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+            if (aeropuerto1Booleano) {
+                rutaImagenTemporal = "recursos/fondos/a1.jpg";
                 pintarBorradorTemporal = false;
                 imgTemporal = null;
                 imgTemporal = new Image(rutaImagenTemporal);
                 pintarAeropuerto = true;
-                tipoAeropuerto=1; //esta linea es importante cambia el tipo de aeropuerto
+                tipoAeropuerto = 5; //esta linea es importante cambia el tipo de aeropuerto
             }
-        }//  Cargar Aeropuerto temporal de mouse borrador
-        if (pulsacion.intersects(rBorrador) && juego.aeropuertosMapa.size() > 0) {
-            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+            if (aeropuerto2Booleano) {
+                rutaImagenTemporal = "recursos/fondos/a2.jpg";
+                pintarBorradorTemporal = false;
+                imgTemporal = null;
+                imgTemporal = new Image(rutaImagenTemporal);
+                pintarAeropuerto = true;
+                tipoAeropuerto = 6; //esta linea es importante cambia el tipo de aeropuerto
+            }
+            if (aeropuerto3Booleano) {
+                rutaImagenTemporal = "recursos/fondos/a3.jpg";
+                pintarBorradorTemporal = false;
+                imgTemporal = null;
+                imgTemporal = new Image(rutaImagenTemporal);
+                pintarAeropuerto = true;
+                tipoAeropuerto = 7; //esta linea es importante cambia el tipo de aeropuerto
+            }
+            if (aeropuerto4Booleano) {
+                rutaImagenTemporal = "recursos/fondos/a4.jpg";
+                pintarBorradorTemporal = false;
+                imgTemporal = null;
+                imgTemporal = new Image(rutaImagenTemporal);
+                pintarAeropuerto = true;
+                tipoAeropuerto = 8; //esta linea es importante cambia el tipo de aeropuerto
+            }
+            if (borradorBooleano) {//esta pendiente la prueba
                 pintarAeropuerto = false;
                 imgTemporal = null;
                 imgTemporal = new Image("recursos/fondos/borrador.png");
                 pintarBorradorTemporal = true;
             }
-        }
-        // Pintar aeropuerto en la cuadricula
-        if (pulsacion.intersects(rCuadricula)) {
-            if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON) && pintarAeropuerto) {
+            if (cuadriculaBooleano && pintarAeropuerto) {
                 int x = pulsacionX;
                 int y = pulsacionY;
                 while (x % 30 != 0 || y % 30 != 0) {
@@ -278,10 +361,9 @@ public class Configuracion extends BasicGameState {
                 }
                 pintarAeropuerto = false;
                 imgTemporal = null;
-                juego.aeropuertosMapa.add(new Aeropuerto(rutaImagenTemporal,tipoAeropuerto, x, y));
+                juego.aeropuertosMapa.add(new Aeropuerto(rutaImagenTemporal, tipoAeropuerto, x, y));
             }
-            // Borrar aeropuerto de la cuadricula
-            if (container.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) && pintarBorradorTemporal) {
+            if (cuadriculaBooleano && pintarBorradorTemporal) {
                 boolean buscar = true;
                 int j = 0;
                 while (j < juego.aeropuertosMapa.size() && buscar) {
@@ -294,6 +376,8 @@ public class Configuracion extends BasicGameState {
                     j++;
                 }
             }
+
         }
+// Fin eventos de click --------------------------------------------------------
     }
 }

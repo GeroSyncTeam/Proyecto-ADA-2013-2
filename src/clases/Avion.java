@@ -44,8 +44,8 @@ public class Avion extends Rectangle {
      *
      * Se carganen memoria las rutas dde los sprites del objeto avión
      */
-    public Avion(int tipo, int x, int y, int ancho, int alto) {
-        super(x, y, ancho, alto);
+    public Avion(int tipo, int x, int y) {
+        super(x, y, 1, 1);
         this.tipo = tipo;
         rutasSpriteSheet = new Image[21];
         cargarSpriteSheet();
@@ -60,29 +60,37 @@ public class Avion extends Rectangle {
     private void cargarSpriteSheet() {
         String ruta = "";
         switch (tipo) {
-            case 0:
+            case 1:
                 ruta = "recursos/aeroplano/";
                 altura = 1200;
                 velocidad = 300;
                 ganancia = 10;
+                this.width=30;
+                this.height=30;
                 break;
-            case 1:
+            case 2:
                 ruta = "recursos/avión comercial de carga/";
                 altura = 5300;
                 velocidad = 580;
                 ganancia = 50;
+                this.width=45;
+                this.height=45;
                 break;
-            case 2:
+            case 3:
                 ruta = "recursos/avión comercial de pasajeros/";
                 altura = 10000;
                 velocidad = 800;
                 ganancia = 80;
+                this.width=45;
+                this.height=45;
                 break;
-            case 3:
+            case 4:
                 ruta = "recursos/avión militar/";
                 altura = 12000;
                 velocidad = 1200;
                 ganancia = 100;
+                this.width=30;
+                this.height=30;
                 break;
         }
         for (int i = 0; i < 21; i++) {

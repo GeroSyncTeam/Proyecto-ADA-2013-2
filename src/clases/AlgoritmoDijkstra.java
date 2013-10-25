@@ -18,7 +18,7 @@ import java.util.Vector;
 public class AlgoritmoDijkstra {
 
     public int tiposDeSector[];
-   public int[] nodos;  // Letras de identificación de nodo
+    public int[] nodos;  // Letras de identificación de nodo
     int[][] grafo;  // Matriz de distancias entre nodos
     String rutaMasCorta;                           // distancia más corta
     int longitudMasCorta = Integer.MAX_VALUE;   // ruta más corta
@@ -33,16 +33,17 @@ public class AlgoritmoDijkstra {
         this.nodos = new int[225];
         for (int i = 0; i < nodos.length; i++) {
             nodos[i] = i;
-            tiposDeSector[i]=0;
+            tiposDeSector[i] = 0;
         }
         grafo = new int[this.nodos.length][this.nodos.length];
         enlazarGrafo();
     }
-    
-    public void reiniciarTiposSector(){
+
+    public void reiniciarTiposSector() {
         for (int i = 0; i < nodos.length; i++) {
-            
-            tiposDeSector[i]=0;
+            if (tiposDeSector[i] < 5) {
+                tiposDeSector[i] = 0;
+            }
         }
     }
 //tiposDeSector[i + 1] 
@@ -52,7 +53,7 @@ public class AlgoritmoDijkstra {
             //agrega nodo a la izquierda
             try {
                 agregarRuta(nodo, nodo - 1, 1);
-                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
                     agregarRuta(nodo - 1, nodo, Integer.MAX_VALUE);
                 } else {
                     agregarRuta(nodo - 1, nodo, 1);
@@ -62,7 +63,7 @@ public class AlgoritmoDijkstra {
             //agrega nodo a la derecha
             try {
                 agregarRuta(nodo, nodo + 1, 1);
-                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
                     agregarRuta(nodo + 1, nodo, Integer.MAX_VALUE);
                 } else {
                     agregarRuta(nodo + 1, nodo, 1);
@@ -72,7 +73,7 @@ public class AlgoritmoDijkstra {
             //agrega nodo arriba
             try {
                 agregarRuta(nodo, nodo - 15, 1);
-                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
                     agregarRuta(nodo - 15, nodo, Integer.MAX_VALUE);
                 } else {
                     agregarRuta(nodo - 15, nodo, 1);
@@ -82,7 +83,7 @@ public class AlgoritmoDijkstra {
             //agrega nodo abajo
             try {
                 agregarRuta(nodo, nodo + 15, 1);
-                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
                     agregarRuta(nodo + 15, nodo, Integer.MAX_VALUE);
                 } else {
                     agregarRuta(nodo + 15, nodo, 1);
@@ -92,7 +93,7 @@ public class AlgoritmoDijkstra {
             //agrega nodo izquierda-arriba
             try {
                 agregarRuta(nodo, nodo - 16, 1);
-                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
                     agregarRuta(nodo - 16, nodo, Integer.MAX_VALUE);
                 } else {
                     agregarRuta(nodo - 16, nodo, 1);
@@ -102,7 +103,7 @@ public class AlgoritmoDijkstra {
             //agrega nodo derecha-arriba
             try {
                 agregarRuta(nodo, nodo - 14, 1);
-                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
                     agregarRuta(nodo - 14, nodo, Integer.MAX_VALUE);
                 } else {
                     agregarRuta(nodo - 14, nodo, 1);
@@ -112,7 +113,7 @@ public class AlgoritmoDijkstra {
             //agrega nodo izquierda-abajo
             try {
                 agregarRuta(nodo, nodo + 14, 1);
-                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
                     agregarRuta(nodo + 14, nodo, Integer.MAX_VALUE);
                 } else {
                     agregarRuta(nodo + 14, nodo, 1);
@@ -122,7 +123,7 @@ public class AlgoritmoDijkstra {
             //agrega nodo derecha-abajo
             try {
                 agregarRuta(nodo, nodo + 16, 1);
-                if (tiposDeSector[nodo] != 0) {//0 es el espacio aereo libre                                 
+                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
                     agregarRuta(nodo + 16, nodo, Integer.MAX_VALUE);
                 } else {
                     agregarRuta(nodo + 16, nodo, 1);
@@ -331,6 +332,4 @@ public class AlgoritmoDijkstra {
         return resp;
     }
 
-    public void agregarRutas2() {
-    }
 }

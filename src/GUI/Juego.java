@@ -25,7 +25,7 @@ import org.newdawn.slick.state.StateBasedGame;
  * @version 1.0
  */
 public class Juego extends BasicGameState {
-    
+
     public int minutos;
     public CopyOnWriteArrayList<Aeropuerto> aeropuertosMapa;
     CopyOnWriteArrayList<Avion> aviones;
@@ -39,7 +39,7 @@ public class Juego extends BasicGameState {
     public Juego() {
         minutos = 2;
         aeropuertosMapa = new CopyOnWriteArrayList<Aeropuerto>();
-        
+
     }
 
     /**
@@ -69,21 +69,20 @@ public class Juego extends BasicGameState {
             x = 300;
             for (int j = 0; j < 15; j++) {
                 mapa[id] = new Sector(id, x, y);
-                
+
                 id++;
                 x += 30;
             }
-            
+
             y += 30;
         }
         //-------------------------------------------
-        
+        grafo = new AlgoritmoDijkstra();
+        actualizarPosicionAeropuertos(mapa); //carga en el grafo en la posicion correcta el tipo de aeropuerto  especifico 
         aviones = new CopyOnWriteArrayList<Avion>();
         nodosAviones = new CopyOnWriteArrayList<Point>();
-        grafo = new AlgoritmoDijkstra();
-        
         barraIzquierda = new Image("recursos/fondos/barra izquierda2.jpg");
-        avion = new Avion(3,200,90, 30,30);
+        avion = new Avion(3, 200, 90); //este es un avión de prueba
         aviones.add(avion);
 //        a1 = new Animation(avion.rutasSpriteSheet, 180);
 //        a1.setPingPong(true);
@@ -131,61 +130,67 @@ public class Juego extends BasicGameState {
      */
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        // código de prueba-----------------------------------------------------
         if (container.getInput().isKeyPressed(Input.KEY_RIGHT)) {
             avion.x += 4;
-            System.out.println(" x "+avion.x);
+            System.out.println(" x " + avion.x);
         }
         if (container.getInput().isKeyPressed(Input.KEY_DOWN)) {
             avion.y += 4;
-            System.out.println(" y "+avion.y);
+            System.out.println(" y " + avion.y);
         }
         if (container.getInput().isKeyPressed(Input.KEY_UP)) {
             avion.y -= 4;
-            System.out.println(" y "+avion.y);
+            System.out.println(" y " + avion.y);
         }
         if (container.getInput().isKeyPressed(Input.KEY_LEFT)) {
             avion.x -= 4;
-            System.out.println(" x "+avion.x);
+            System.out.println(" x " + avion.x);
         }
-        if (container.getInput().isKeyPressed(Input.KEY_ENTER)) {
-            
-            for (int i = 0; i < 225; i++) {   
-                
-                    if(i%15==0 ){
-                        System.out.println("");
-
-                    }    
-                    System.out.print("  "+grafo.tiposDeSector[i]);
-            }
-            System.out.println("");
-        }
-        //Reasignar posición a un avion en el mapa -----
+        //----------------------------------------------------------------------
+        //Reasignar posición a un avion en el mapa -----------------------------
         for (int i = 0; i < aviones.size(); i++) {
-            buscarAviones(mapa, aviones.get(i), minutos);
+            actualizarPosicionAviones(mapa, aviones.get(i));
         }
         grafo.reiniciarTiposSector();
         for (int j = 0; j < nodosAviones.size(); j++) {
-            int id = nodosAviones.get(j).y;
-            int posicion=nodosAviones.get(j).x;
-            grafo.tiposDeSector[posicion] = id;
-            
-            
+            int posicion = nodosAviones.get(j).x;
+            if (grafo.tiposDeSector[posicion] < 5) {
+                int id = nodosAviones.get(j).y;
+                grafo.tiposDeSector[posicion] = id;
+            }
         }
+        //llamo el metodo de la la clase AlgoritmoDijkstra que actualiza los enlaces
         grafo.enlazarGrafo();
-        //llamo el metode la la clase AlgoritmoDijkstra que actualiza los enlaces
-        //----------------------------------------------
-
+        //----------------------------------------------------------------------
+        //-------------- Muestra el grafo (temporal) ---------------------------
+        if (container.getInput().isKeyPressed(Input.KEY_ENTER)) {
+            for (int i = 0; i < 225; i++) {
+                if (i % 15 == 0) {
+                    System.out.println("");
+                }
+                System.out.print("  " + grafo.tiposDeSector[i]);
+            }
+            System.out.println("");
+        }
+        //------------------------------------------------------------
     }
-    
+
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
         init2(container, game);
     }
-    
+
     @Override
     public void leave(GameContainer container, StateBasedGame game) throws SlickException {
-        
+        mapa = null;
+        grafo = null;
+        aviones = null;
+        nodosAviones = null;
+        barraIzquierda = null;
+        avion = null; //este es un avión de prueba
+
     }
-    
+
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
     }
@@ -198,27 +203,42 @@ public class Juego extends BasicGameState {
      *
      * Compara las posiciones de los aviones con las posiciones de casa sector
      * del mapa con el fin de encontrar en que posicion esxacta se encuentra el
-     * avion y las guarda en un objeto de tipo Point
-     * x= posición del avión en el mapa
-     * y= id del avión
+     * avion y las guarda en un objeto de tipo Point x= posición del avión en el
+     * mapa y= id del avión
      */
-    public void buscarAviones(Sector[] sectores, Avion avion, int encontrados) {
+    public void actualizarPosicionAviones(Sector[] sectores, Avion avion) {
         nodosAviones.clear();
         int inicio = 0;
         int fin = sectores.length - 1;
         int medio = (inicio + fin) / 2;
-        
-        while (medio < sectores.length && encontrados < 4) {
+
+        while (medio < sectores.length) {
             if (inicio < (fin / 2) && sectores[inicio].intersects(avion)) {
-                encontrados++;
-                nodosAviones.add(new Point(sectores[inicio].getId(),avion.tipo));
+
+                nodosAviones.add(new Point(sectores[inicio].getId(), avion.tipo));
             }
             if (sectores[medio].intersects(avion)) {
-                encontrados++;
-                nodosAviones.add(new Point(sectores[medio].getId(),avion.tipo));
+
+                nodosAviones.add(new Point(sectores[medio].getId(), avion.tipo));
             }
             inicio++;
             medio++;
+        }
+    }
+
+    public void actualizarPosicionAeropuertos(Sector[] sectores) {
+        
+        for (int i = 0; i < aeropuertosMapa.size(); i++) {
+            boolean next = true;
+int iterador = 0;
+            while (iterador < sectores.length && next) {
+                if (aeropuertosMapa.get(i).intersects(sectores[iterador])) {
+                    grafo.tiposDeSector[iterador] = aeropuertosMapa.get(i).getTipo();
+                    next = false;
+                }
+                iterador++;
+            }
+
         }
     }
 }
