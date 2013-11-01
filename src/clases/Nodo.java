@@ -4,13 +4,11 @@
  */
 package clases;
 
-
-
 /**
  *
  * @author Gero
  */
-public class Nodo implements Comparable<Nodo>{
+public class Nodo implements Comparable<Nodo> {
 
     public int id;
     int distancia = Integer.MAX_VALUE;
@@ -29,7 +27,6 @@ public class Nodo implements Comparable<Nodo>{
         this(x, 0, null);
     }
 
-    
     @Override
     public int compareTo(Nodo tmp) {
         return this.distancia - tmp.distancia;

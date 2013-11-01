@@ -39,9 +39,8 @@ public class PruebasGraficas extends BasicGame {
     public static void main(String args[]) {
 
 //        new PruebasGraficas();
-        
+
         AlgoritmoDijkstra mapa = new AlgoritmoDijkstra();
-        mapa.modificarDistancias(18);
         System.out.println(mapa.encontrarRutaMinimaDijkstra(5, 30));
     }
 

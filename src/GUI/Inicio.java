@@ -45,6 +45,7 @@ public class Inicio extends BasicGameState {
      *
      * Se cargan todos los recursos que se usaran
      */
+    @Override
     public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
         XBOTONES = container.getWidth() / 6;
         fondo = new Image("recursos/fondos/fondo menu.jpg");
@@ -169,7 +170,6 @@ public class Inicio extends BasicGameState {
             dibujarSobreCreditos = false;
         }
     }
-
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {

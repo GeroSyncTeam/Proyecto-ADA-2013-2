@@ -19,7 +19,7 @@ public class AlgoritmoDijkstra {
 
     public int tiposDeSector[];
     public int[] nodos;  // Letras de identificación de nodo
-    int[][] grafo;  // Matriz de distancias entre nodos
+    public int[][] grafo;  // Matriz de distancias entre nodos
     String rutaMasCorta;                           // distancia más corta
     int longitudMasCorta = Integer.MAX_VALUE;   // ruta más corta
     List<Nodo> listos = null;                        // nodos revisados Dijkstra
@@ -41,39 +41,42 @@ public class AlgoritmoDijkstra {
 
     public void reiniciarTiposSector() {
         for (int i = 0; i < nodos.length; i++) {
-            if (tiposDeSector[i] < 5) {
+            if (tiposDeSector[i] < 6) {
                 tiposDeSector[i] = 0;
             }
         }
     }
-//tiposDeSector[i + 1] 
 
     public void enlazarGrafo() {
         for (int nodo = 0; nodo < 225; nodo++) {
             //agrega nodo a la izquierda
+            if (nodo % 15 != 0) {
             try {
                 agregarRuta(nodo, nodo - 1, 1);
-                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
+                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 6) {//0 es el espacio aereo libre                                 
                     agregarRuta(nodo - 1, nodo, Integer.MAX_VALUE);
                 } else {
                     agregarRuta(nodo - 1, nodo, 1);
                 }
             } catch (Exception e) {
             }
+        }
             //agrega nodo a la derecha
-            try {
-                agregarRuta(nodo, nodo + 1, 1);
-                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
-                    agregarRuta(nodo + 1, nodo, Integer.MAX_VALUE);
-                } else {
-                    agregarRuta(nodo + 1, nodo, 1);
+            if ((nodo + 1) % 15 != 0) {
+                try {
+                    agregarRuta(nodo, nodo + 1, 1);
+                    if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 6) {//0 es el espacio aereo libre                                 
+                        agregarRuta(nodo + 1, nodo, Integer.MAX_VALUE);
+                    } else {
+                        agregarRuta(nodo + 1, nodo, 1);
+                    }
+                } catch (Exception e) {
                 }
-            } catch (Exception e) {
             }
             //agrega nodo arriba
             try {
                 agregarRuta(nodo, nodo - 15, 1);
-                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
+                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 6) {//0 es el espacio aereo libre                                 
                     agregarRuta(nodo - 15, nodo, Integer.MAX_VALUE);
                 } else {
                     agregarRuta(nodo - 15, nodo, 1);
@@ -83,7 +86,7 @@ public class AlgoritmoDijkstra {
             //agrega nodo abajo
             try {
                 agregarRuta(nodo, nodo + 15, 1);
-                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
+                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 6) {//0 es el espacio aereo libre                                 
                     agregarRuta(nodo + 15, nodo, Integer.MAX_VALUE);
                 } else {
                     agregarRuta(nodo + 15, nodo, 1);
@@ -91,108 +94,58 @@ public class AlgoritmoDijkstra {
             } catch (Exception e) {
             }
             //agrega nodo izquierda-arriba
+            if (nodo % 15 != 0) {
             try {
                 agregarRuta(nodo, nodo - 16, 1);
-                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
+                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 6) {//0 es el espacio aereo libre                                 
                     agregarRuta(nodo - 16, nodo, Integer.MAX_VALUE);
                 } else {
                     agregarRuta(nodo - 16, nodo, 1);
                 }
             } catch (Exception e) {
             }
+        }
             //agrega nodo derecha-arriba
-            try {
-                agregarRuta(nodo, nodo - 14, 1);
-                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
-                    agregarRuta(nodo - 14, nodo, Integer.MAX_VALUE);
-                } else {
-                    agregarRuta(nodo - 14, nodo, 1);
+            if ((nodo + 1) % 15 != 0) {
+                try {
+                    agregarRuta(nodo, nodo - 14, 1);
+                    if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 6) {//0 es el espacio aereo libre                                 
+                        agregarRuta(nodo - 14, nodo, Integer.MAX_VALUE);
+                    } else {
+                        agregarRuta(nodo - 14, nodo, 1);
+                    }
+                } catch (Exception e) {
                 }
-            } catch (Exception e) {
             }
             //agrega nodo izquierda-abajo
-            try {
-                agregarRuta(nodo, nodo + 14, 1);
-                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
-                    agregarRuta(nodo + 14, nodo, Integer.MAX_VALUE);
-                } else {
-                    agregarRuta(nodo + 14, nodo, 1);
+            if (nodo % 15 != 0) { //si el nodo actual no es multiplo de 15 no agrega izquierda-abajo al limite izquierdo del mapa
+
+                try {
+                    agregarRuta(nodo, nodo + 14, 1);
+                    if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 6) {//0 es el espacio aereo libre                                 
+                        agregarRuta(nodo + 14, nodo, Integer.MAX_VALUE);
+                    } else {
+                        agregarRuta(nodo + 14, nodo, 1);
+                    }
+                } catch (Exception e) {
                 }
-            } catch (Exception e) {
             }
             //agrega nodo derecha-abajo
-            try {
-                agregarRuta(nodo, nodo + 16, 1);
-                if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 5) {//0 es el espacio aereo libre                                 
-                    agregarRuta(nodo + 16, nodo, Integer.MAX_VALUE);
-                } else {
-                    agregarRuta(nodo + 16, nodo, 1);
+            if ((nodo + 1) % 15 != 0) {//no agrega nodo abajo-derecha
+                try {
+                    agregarRuta(nodo, nodo + 16, 1);
+                    if (tiposDeSector[nodo] != 0 && tiposDeSector[nodo] < 6) {//0 es el espacio aereo libre                                 
+                        agregarRuta(nodo + 16, nodo, Integer.MAX_VALUE);
+                    } else {
+                        agregarRuta(nodo + 16, nodo, 1);
+                    }
+                } catch (Exception e) {
                 }
-            } catch (Exception e) {
             }
         }
     }
 
-    /**
-     *
-     * @param nodo Modifica el valor de los caminos que se unen con el parametro
-     * nodo
-     *
-     */
-    public void modificarDistancias(int nodo) {
-
-        //agrega nodo a la izquierda
-        try {
-//            agregarRuta(nodo, nodo - 1, 9);
-            agregarRuta(nodo - 1, nodo, Integer.MAX_VALUE);
-        } catch (Exception e) {
-        }
-        //agrega nodo a la derecha
-        try {
-//            agregarRuta(nodo, nodo + 1, 9);
-            agregarRuta(nodo + 1, nodo, Integer.MAX_VALUE);
-        } catch (Exception e) {
-        }
-        //agrega nodo arriba
-        try {
-//            agregarRuta(nodo, nodo - 15, 9);
-            agregarRuta(nodo - 15, nodo, Integer.MAX_VALUE);
-        } catch (Exception e) {
-        }
-        //agrega nodo abajo
-        try {
-//            agregarRuta(nodo, nodo + 15, 9);
-            agregarRuta(nodo + 15, nodo, Integer.MAX_VALUE);
-        } catch (Exception e) {
-        }
-        //agrega nodo izquierda-arriba
-        try {
-//            agregarRuta(nodo, nodo - 16, 9);
-            agregarRuta(nodo - 16, nodo, Integer.MAX_VALUE);
-        } catch (Exception e) {
-        }
-        //agrega nodo derecha-arriba
-        try {
-//            agregarRuta(nodo, nodo - 14, 9);
-            agregarRuta(nodo - 14, nodo, Integer.MAX_VALUE);
-        } catch (Exception e) {
-        }
-        //agrega nodo izquierda-abajo
-        try {
-//            agregarRuta(nodo, nodo + 14, 9);
-            agregarRuta(nodo + 14, nodo, Integer.MAX_VALUE);
-        } catch (Exception e) {
-        }
-        //agrega nodo derecha-abajo
-        try {
-//            agregarRuta(nodo, nodo + 16, 9);
-            agregarRuta(nodo + 16, nodo, Integer.MAX_VALUE);
-        } catch (Exception e) {
-        }
-
-    }
     // asigna el tamaño de la arista entre dos nodos
-
     public void agregarRuta(int origen, int destino, int distancia) {
         grafo[origen][destino] = distancia;
         grafo[destino][origen] = distancia;
@@ -331,5 +284,4 @@ public class AlgoritmoDijkstra {
         }
         return resp;
     }
-
 }

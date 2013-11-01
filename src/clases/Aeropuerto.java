@@ -17,6 +17,7 @@ public class Aeropuerto extends Rectangle {
     private int tipo;
     private String ruta;
     private Image imagen;
+    public int posicionEnGrafo;
 
     public Aeropuerto(String ruta, int tipo, int x, int y) {
         super(x, y, 90, 90);
@@ -27,6 +28,7 @@ public class Aeropuerto extends Rectangle {
         } catch (SlickException ex) {
         }
         this.tipo = tipo;
+        posicionEnGrafo=-1;
     }
 
     /**

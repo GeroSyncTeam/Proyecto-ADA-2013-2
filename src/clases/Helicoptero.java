@@ -23,12 +23,10 @@ public class Helicoptero extends Rectangle {
         cargarSpriteSheet();
     }
 
-    
-    /** 
-     * En este método se cargan las rutas de las imagenes del avion y se
-     * asignan los valores de las variables altura, velocidad y ganancia 
+    /**
+     * En este método se cargan las rutas de las imagenes del avion y se asignan
+     * los valores de las variables altura, velocidad y ganancia
      */
-    
     private void cargarSpriteSheet() {
         String ruta = "recursos/helicóptero/";
 
