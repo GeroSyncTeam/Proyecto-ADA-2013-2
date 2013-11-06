@@ -31,7 +31,7 @@ public class Juego extends BasicGameState {
     public CopyOnWriteArrayList<Aeropuerto> aeropuertosMapa;
     CopyOnWriteArrayList<Avion> aviones;
     CopyOnWriteArrayList<Point> nodosAviones;
-    Image barraIzquierda, marco, fondo;
+    Image barraIzquierda, fondo;
     Sector mapa[];
     Rectangle rMapa;
     AlgoritmoDijkstra grafo;
@@ -96,7 +96,9 @@ public class Juego extends BasicGameState {
         avion4 = new Avion(4, 200, 350); //este es un avión de prueba de 1 a 4
         asignarDestinosAvion(avion4);
         aviones.add(avion);
-//        aviones.add(avion2);
+        aviones.add(avion2);
+        aviones.add(avion3);
+        aviones.add(avion4);
 //        a1 = new Animation(avion.rutasSpriteSheet, 180);
 //        a1.setPingPong(true);
 //        marco = new Image("recursos/fondos/marco mapa.png");
@@ -136,8 +138,6 @@ public class Juego extends BasicGameState {
         g.drawImage(avion2.rutasSpriteSheet[5], avion2.x, avion2.y);
         g.drawImage(avion3.rutasSpriteSheet[5], avion3.x, avion3.y);
         g.drawImage(avion4.rutasSpriteSheet[5], avion4.x, avion4.y);
-
-//        marco.draw(250, 0);
     }
 
     /**
@@ -315,14 +315,12 @@ public class Juego extends BasicGameState {
         //codigo de prueba------------------------------------------------------
         if (container.getInput().isKeyPressed(Input.KEY_E)) {
             System.out.println("helicópetero");
-            for (int i = 0; i < aviones.get(0).ruta.length; i++) {
-                System.out.print(aviones.get(0).ruta[i] + " ");
+            for (int j = 0; j < aviones.size(); j++) {
+                for (int i = 0; i < aviones.get(j).ruta.length; i++) {
+                    System.out.print(aviones.get(j).ruta[i] + " ");
+                }
             }
             System.out.println("");
-//            System.out.println("avión");
-//            for (int i = 0; i < aviones.get(1).ruta.length; i++) {
-//                System.out.print(aviones.get(1).ruta[i] + " ");
-//            }
         }
         //----------------------------------------------------------------------
         //-------------- Muestra el grafo (temporal) ---------------------------
@@ -444,7 +442,8 @@ public class Juego extends BasicGameState {
 
     /**
      *
-     * @param avion Este método agrega al objeto avión los id de los aeropuertos
+     * @param avion 
+     * Este método agrega al objeto avión los id de los aeropuertos
      * a la variable estinos si el id del aeropuerto es igual a alguno de los id
      * de los aeropuertos donde puede aterrizar el avión
      */
@@ -457,6 +456,11 @@ public class Juego extends BasicGameState {
         }
     }
 
+    /**
+     *
+     * @param avion Este método escoje el mejor camino desde el punto en el que
+     * se encuentra el avión hasta uno de sus posibles aeropuertos de destino
+     */
     public void calcularRuta(Avion avion) {
         int maximo = Integer.MAX_VALUE;
         String ruta = "";
@@ -480,11 +484,4 @@ public class Juego extends BasicGameState {
         }
         avion.ruta = ruta.split(" ");
     }
-
-    public boolean verificarColision(int limiteIzq, int limiteDer, int destino) {
-
-        return false;
-    }
-//    if ((destino == limiteIzq + 1) || (destino == limiteIzq + 15)) {
-//        }
 }
