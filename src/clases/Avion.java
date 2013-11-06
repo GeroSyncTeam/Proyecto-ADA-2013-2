@@ -41,6 +41,8 @@ public class Avion extends Rectangle {
     public boolean aterrizo;
     public int posicionEnGrafoIzquierda;
     public int posicionEnGrafoDerecha;
+    public int indiceRuta;
+    public boolean usarPosicionIzquierda;
 
     /**
      *
@@ -55,12 +57,14 @@ public class Avion extends Rectangle {
     public Avion(int tipo, int x, int y) {
         super(x, y, 1, 1);
         this.tipo = tipo;
+        indiceRuta=1;
         posicionEnGrafoIzquierda = -1;
         posicionEnGrafoDerecha = -1;
         rutasSpriteSheet = new Image[21];
         aeropuertosValidos = new int[2];
         ruta = null;
         destinos = new LinkedList<Integer>();
+        usarPosicionIzquierda=false;
         cargarSpriteSheet();
     }
 

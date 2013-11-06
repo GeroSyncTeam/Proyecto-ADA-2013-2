@@ -35,7 +35,7 @@ public class Juego extends BasicGameState {
     Sector mapa[];
     Rectangle rMapa;
     AlgoritmoDijkstra grafo;
-    Avion avion;
+    Avion avion, avion3, avion4;
     Avion avion2;
 //    Animation a1;
 
@@ -91,8 +91,12 @@ public class Juego extends BasicGameState {
         asignarDestinosAvion(avion);
         avion2 = new Avion(3, 200, 150); //este es un avión de prueba de 1 a 4
         asignarDestinosAvion(avion2);
+        avion3 = new Avion(1, 200, 250); //este es un avión de prueba de 1 a 4
+        asignarDestinosAvion(avion3);
+        avion4 = new Avion(4, 200, 350); //este es un avión de prueba de 1 a 4
+        asignarDestinosAvion(avion4);
         aviones.add(avion);
-        aviones.add(avion2);
+//        aviones.add(avion2);
 //        a1 = new Animation(avion.rutasSpriteSheet, 180);
 //        a1.setPingPong(true);
 //        marco = new Image("recursos/fondos/marco mapa.png");
@@ -130,6 +134,8 @@ public class Juego extends BasicGameState {
 
         g.drawImage(avion.rutasSpriteSheet[5], avion.x, avion.y);
         g.drawImage(avion2.rutasSpriteSheet[5], avion2.x, avion2.y);
+        g.drawImage(avion3.rutasSpriteSheet[5], avion3.x, avion3.y);
+        g.drawImage(avion4.rutasSpriteSheet[5], avion4.x, avion4.y);
 
 //        marco.draw(250, 0);
     }
@@ -145,6 +151,7 @@ public class Juego extends BasicGameState {
      */
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+
         // código de prueba avion1----------------------------------------------
         if (container.getInput().isKeyPressed(Input.KEY_RIGHT)) {
             avion.x += 4;
@@ -181,6 +188,42 @@ public class Juego extends BasicGameState {
             System.out.println(" x " + avion2.x);
         }
         //----------------------------------------------------------------------
+        // código de prueba avion4----------------------------------------------
+        if (container.getInput().isKeyPressed(Input.KEY_H)) {
+            avion4.x += 4;
+
+        }
+        if (container.getInput().isKeyPressed(Input.KEY_G)) {
+            avion4.y += 4;
+
+        }
+        if (container.getInput().isKeyPressed(Input.KEY_T)) {
+            avion4.y -= 4;
+
+        }
+        if (container.getInput().isKeyPressed(Input.KEY_F)) {
+            avion4.x -= 4;
+
+        }
+        //----------------------------------------------------------------------
+        // código de prueba avion4----------------------------------------------
+        if (container.getInput().isKeyPressed(Input.KEY_L)) {
+            avion3.x += 4;
+
+        }
+        if (container.getInput().isKeyPressed(Input.KEY_K)) {
+            avion3.y += 4;
+
+        }
+        if (container.getInput().isKeyPressed(Input.KEY_I)) {
+            avion3.y -= 4;
+
+        }
+        if (container.getInput().isKeyPressed(Input.KEY_J)) {
+            avion3.x -= 4;
+
+        }
+        //----------------------------------------------------------------------
 
         nodosAviones.clear(); // limpia la lista que guarda en que posición de el mapa se encuentra cada avión
         //Reasignar posición a un avion en el mapa -----------------------------
@@ -210,9 +253,60 @@ public class Juego extends BasicGameState {
         for (int i = 0; i < aviones.size(); i++) {
             if (rMapa.intersects(aviones.get(i))) {
                 if (!(aviones.get(i).ruta == null)) {// si no es nula la 
-                    //verificar que no haya colisión
-//                    if (grafo.grafo[][]<Integer.MAX_VALUE) {
-//                    }
+                    int origen;
+                    if (aviones.get(i).usarPosicionIzquierda) {
+                        origen = aviones.get(i).posicionEnGrafoIzquierda;
+                    } else {
+                        origen = aviones.get(i).posicionEnGrafoDerecha;
+                    }
+                    int indiceRuta = aviones.get(i).indiceRuta;
+
+                    if (indiceRuta < aviones.get(i).ruta.length) {
+                        int destino = Integer.parseInt(aviones.get(i).ruta[indiceRuta]);
+                        //verificar que no haya colisión
+                        if (grafo.grafo[origen][destino] < Integer.MAX_VALUE) {
+                            //dar paso
+                            boolean sincronizadoX = true;
+                            if (aviones.get(i).x == mapa[destino].x) {
+                                sincronizadoX = false;
+                            }
+                            if (sincronizadoX) {
+                                if (aviones.get(i).x < mapa[destino].x) {
+                                    aviones.get(i).x++;
+                                } else {
+                                    aviones.get(i).x--;
+                                }
+                            }
+                            boolean sincronizadoY = true;
+                            if (aviones.get(i).y == mapa[destino].y) {
+                                sincronizadoY = false;
+                            }
+                            if (sincronizadoY) {
+                                if (aviones.get(i).y < mapa[destino].y) {
+                                    aviones.get(i).y++;
+                                } else {
+                                    aviones.get(i).y--;
+                                }
+                            }
+                            if (!sincronizadoX && !sincronizadoY) {
+                                aviones.get(i).indiceRuta++;
+                            }
+                            //fin dar paso
+                        } else {
+//                            System.out.println("infinito");
+//                            System.out.println("izquierda " + limiteIzq + " derecha " + limiteDer + " destino " + destino);
+//                            System.out.println("distancia izquierda a destino " + grafo.grafo[limiteIzq][destino]);
+//                            System.out.println("distancia derecha a destino " + grafo.grafo[limiteDer][destino]);
+                            aviones.get(i).indiceRuta = 1;
+
+                            aviones.get(i).ruta = null;
+                        }
+//                        if (aviones.get(i).ruta.length < aviones.get(i).indiceRuta) {
+//                            aviones.remove(i);
+//                        }
+                    } else {
+//                       aviones.remove(i);
+                    }
                 } else {//si la ruta del avión es nula
                     calcularRuta(aviones.get(i));
                 }
@@ -225,7 +319,7 @@ public class Juego extends BasicGameState {
                 System.out.print(aviones.get(0).ruta[i] + " ");
             }
             System.out.println("");
-            System.out.println("avión");
+//            System.out.println("avión");
 //            for (int i = 0; i < aviones.get(1).ruta.length; i++) {
 //                System.out.print(aviones.get(1).ruta[i] + " ");
 //            }
@@ -367,13 +461,30 @@ public class Juego extends BasicGameState {
         int maximo = Integer.MAX_VALUE;
         String ruta = "";
         for (int j = 0; j < avion.destinos.size(); j++) {
-            String rutaTemporal = grafo.encontrarRutaMinimaDijkstra(avion.posicionEnGrafoIzquierda, avion.destinos.get(j));
-            int minimo = rutaTemporal.length();
-            if (maximo > minimo) {
-                ruta = rutaTemporal;
-                maximo = minimo;
+            String rutaTemporalLimiteIzquierda = grafo.encontrarRutaMinimaDijkstra(avion.posicionEnGrafoIzquierda, avion.destinos.get(j));
+            String rutaTemporalLimiteDerecha = grafo.encontrarRutaMinimaDijkstra(avion.posicionEnGrafoDerecha, avion.destinos.get(j));
+            int minimoIzquierda = rutaTemporalLimiteIzquierda.length();
+            int minimoDerecha = rutaTemporalLimiteDerecha.length();
+
+            if (maximo > minimoIzquierda || maximo > minimoDerecha) {
+                if (minimoIzquierda <= minimoDerecha) {
+                    ruta = rutaTemporalLimiteIzquierda;
+                    maximo = minimoIzquierda;
+                    avion.usarPosicionIzquierda = true;
+                } else {
+                    ruta = rutaTemporalLimiteDerecha;
+                    maximo = minimoDerecha;
+                    avion.usarPosicionIzquierda = false;
+                }
             }
         }
         avion.ruta = ruta.split(" ");
     }
+
+    public boolean verificarColision(int limiteIzq, int limiteDer, int destino) {
+
+        return false;
+    }
+//    if ((destino == limiteIzq + 1) || (destino == limiteIzq + 15)) {
+//        }
 }
