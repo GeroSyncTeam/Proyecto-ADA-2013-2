@@ -10,7 +10,13 @@ import clases.Avion;
 import clases.Sector;
 import java.awt.Point;
 import java.awt.Rectangle;
+
 import java.util.concurrent.CopyOnWriteArrayList;
+import javax.swing.Timer;
+
+
+
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -37,6 +43,7 @@ public class Juego extends BasicGameState {
     AlgoritmoDijkstra grafo;
     Avion avion, avion3, avion4;
     Avion avion2;
+    Timer tiempo;
 //    Animation a1;
 
     public Juego() {
@@ -89,11 +96,11 @@ public class Juego extends BasicGameState {
         fondo = new Image("recursos/fondos/Fondo.jpg");
         avion = new Avion(5, 200, 90); //este es un avión de prueba de 1 a 4
         asignarDestinosAvion(avion);
-        avion2 = new Avion(3, 200, 150); //este es un avión de prueba de 1 a 4
+        avion2 = new Avion(3, 200, 200); //este es un avión de prueba de 1 a 4
         asignarDestinosAvion(avion2);
-        avion3 = new Avion(1, 200, 250); //este es un avión de prueba de 1 a 4
+        avion3 = new Avion(2, 200, 310); //este es un avión de prueba de 1 a 4
         asignarDestinosAvion(avion3);
-        avion4 = new Avion(4, 200, 350); //este es un avión de prueba de 1 a 4
+        avion4 = new Avion(4, 200, 450); //este es un avión de prueba de 1 a 4
         asignarDestinosAvion(avion4);
         aviones.add(avion);
         aviones.add(avion2);
@@ -102,6 +109,9 @@ public class Juego extends BasicGameState {
 //        a1 = new Animation(avion.rutasSpriteSheet, 180);
 //        a1.setPingPong(true);
 //        marco = new Image("recursos/fondos/marco mapa.png");
+//        tiempo = new Timer(1000, null);
+//        tiempo.start();
+
     }
 
     /**
@@ -251,76 +261,88 @@ public class Juego extends BasicGameState {
         //----------------------------------------------------------------------
         //justo en esta parte debo elegir la ruta para cada avión
         for (int i = 0; i < aviones.size(); i++) {
+            aviones.get(i).retraso++;
             if (rMapa.intersects(aviones.get(i))) {
-                if (!(aviones.get(i).ruta == null)) {// si no es nula la 
-                    int origen;
-                    if (aviones.get(i).usarPosicionIzquierda) {
-                        origen = aviones.get(i).posicionEnGrafoIzquierda;
-                    } else {
-                        origen = aviones.get(i).posicionEnGrafoDerecha;
-                    }
+                if (aviones.get(i).ruta != null) {// si no es nula la    
+//                    for (int j = 0; j < aviones.get(i).ruta.length; j++) {
+//                        System.out.print(" "+aviones.get(i).ruta[j]);
+//                        
+//                    }
+//                    System.out.println("");
                     int indiceRuta = aviones.get(i).indiceRuta;
+                    int origen = indiceRuta - 1;
+//                    if (aviones.get(i).usarPosicionIzquierda) {
+//                        origen = aviones.get(i).posicionEnGrafoIzquierda;
+//                    } else {
+//                        origen = aviones.get(i).posicionEnGrafoDerecha;
+//                    }
+
 
                     if (indiceRuta < aviones.get(i).ruta.length) {
-                        int destino = Integer.parseInt(aviones.get(i).ruta[indiceRuta]);
+                        int destino = Integer.parseInt(aviones.get(i).ruta[indiceRuta]);//aca eescoje el destino
                         //verificar que no haya colisión
                         if (grafo.grafo[origen][destino] < Integer.MAX_VALUE) {
                             //dar paso
-                            boolean sincronizadoX = true;
-                            if (aviones.get(i).x == mapa[destino].x) {
-                                sincronizadoX = false;
-                            }
-                            if (sincronizadoX) {
-                                if (aviones.get(i).x < mapa[destino].x) {
-                                    aviones.get(i).x++;
-                                } else {
-                                    aviones.get(i).x--;
+                            if (aviones.get(i).retraso > 10) {
+                                boolean sincronizadoX = true;
+                                if (aviones.get(i).x == mapa[destino].x) {
+                                    sincronizadoX = false;
                                 }
-                            }
-                            boolean sincronizadoY = true;
-                            if (aviones.get(i).y == mapa[destino].y) {
-                                sincronizadoY = false;
-                            }
-                            if (sincronizadoY) {
-                                if (aviones.get(i).y < mapa[destino].y) {
-                                    aviones.get(i).y++;
-                                } else {
-                                    aviones.get(i).y--;
+                                if (sincronizadoX) {
+                                    if (aviones.get(i).x < mapa[destino].x) {
+                                        aviones.get(i).x++;
+                                    } else {
+                                        aviones.get(i).x--;
+                                    }
                                 }
-                            }
-                            if (!sincronizadoX && !sincronizadoY) {
-                                aviones.get(i).indiceRuta++;
+                                boolean sincronizadoY = true;
+                                if (aviones.get(i).y == mapa[destino].y) {
+                                    sincronizadoY = false;
+                                }
+                                if (sincronizadoY) {
+                                    if (aviones.get(i).y < mapa[destino].y) {
+                                        aviones.get(i).y++;
+                                    } else {
+                                        aviones.get(i).y--;
+                                    }
+                                }
+                                if (!sincronizadoX && !sincronizadoY) {
+                                    aviones.get(i).indiceRuta++;
+                                }
+
+                                aviones.get(i).retraso = 0;
                             }
                             //fin dar paso
-                        } else {
-//                            System.out.println("infinito");
-//                            System.out.println("izquierda " + limiteIzq + " derecha " + limiteDer + " destino " + destino);
-//                            System.out.println("distancia izquierda a destino " + grafo.grafo[limiteIzq][destino]);
-//                            System.out.println("distancia derecha a destino " + grafo.grafo[limiteDer][destino]);
+                        } else {///se supone que es cuando hay colisión
+                            System.out.println("recalculo ruta del avion de tipo " + aviones.get(i).tipo);
+                            calcularRuta(aviones.get(i));
                             aviones.get(i).indiceRuta = 1;
-
-                            aviones.get(i).ruta = null;
                         }
-//                        if (aviones.get(i).ruta.length < aviones.get(i).indiceRuta) {
-//                            aviones.remove(i);
-//                        }
-                    } else {
-//                       aviones.remove(i);
-                    }
+                    } 
                 } else {//si la ruta del avión es nula
                     calcularRuta(aviones.get(i));
+                    System.out.println(" ruta del avion de tipo " + aviones.get(i).tipo);
+                    
+                }
+            } else {//aca se hace el aumento de posición en x para que entren a la zona de vuelo
+
+                if (aviones.get(i).retraso > 20) {
+                    aviones.get(i).x++;
+                    aviones.get(i).retraso = 0;
                 }
             }
         }
         //codigo de prueba------------------------------------------------------
         if (container.getInput().isKeyPressed(Input.KEY_E)) {
-            System.out.println("helicópetero");
+            
             for (int j = 0; j < aviones.size(); j++) {
+                System.out.println("----------------------------------");
                 for (int i = 0; i < aviones.get(j).ruta.length; i++) {
                     System.out.print(aviones.get(j).ruta[i] + " ");
                 }
+                System.out.println("");
             }
-            System.out.println("");
+            
         }
         //----------------------------------------------------------------------
         //-------------- Muestra el grafo (temporal) ---------------------------
@@ -442,8 +464,7 @@ public class Juego extends BasicGameState {
 
     /**
      *
-     * @param avion 
-     * Este método agrega al objeto avión los id de los aeropuertos
+     * @param avion Este método agrega al objeto avión los id de los aeropuertos
      * a la variable estinos si el id del aeropuerto es igual a alguno de los id
      * de los aeropuertos donde puede aterrizar el avión
      */

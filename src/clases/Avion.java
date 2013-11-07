@@ -43,6 +43,7 @@ public class Avion extends Rectangle {
     public int posicionEnGrafoDerecha;
     public int indiceRuta;
     public boolean usarPosicionIzquierda;
+    public int retraso;
 
     /**
      *
@@ -65,6 +66,7 @@ public class Avion extends Rectangle {
         ruta = null;
         destinos = new LinkedList<Integer>();
         usarPosicionIzquierda=false;
+        retraso =0;
         cargarSpriteSheet();
     }
 
