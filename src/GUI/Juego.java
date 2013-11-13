@@ -253,8 +253,8 @@ public class Juego extends BasicGameState {
         //muestra la posicion de cada avion en el grafo siendo esta el ultimo sector con el que se registro insersección
         if (container.getInput().isKeyPressed(Input.KEY_Z)) {
             for (int i = 0; i < aviones.size(); i++) {
-                System.out.println(i + " posición por la izquierda " + aviones.get(i).posicionEnGrafoIzquierda);
-                System.out.println(i + " posición por la derecha " + aviones.get(i).posicionEnGrafoDerecha);
+                System.out.println(i + " posición por la izquierda " + aviones.get(i).posicionEnGrafoIzquierdaArriba);
+                System.out.println(i + " posición por la derecha " + aviones.get(i).posicionEnGrafoDerechaAbajo);
             }
 
         }
@@ -272,9 +272,9 @@ public class Juego extends BasicGameState {
                     int indiceRuta = aviones.get(i).indiceRuta;
                     int origen = indiceRuta - 1;
 //                    if (aviones.get(i).usarPosicionIzquierda) {
-//                        origen = aviones.get(i).posicionEnGrafoIzquierda;
+//                        origen = aviones.get(i).posicionEnGrafoIzquierdaArriba;
 //                    } else {
-//                        origen = aviones.get(i).posicionEnGrafoDerecha;
+//                        origen = aviones.get(i).posicionEnGrafoDerechaAbajo;
 //                    }
 
 
@@ -315,7 +315,7 @@ public class Juego extends BasicGameState {
                             //fin dar paso
                         } else {///se supone que es cuando hay colisión
                             System.out.println("recalculo ruta del avion de tipo " + aviones.get(i).tipo);
-                            calcularRuta(aviones.get(i));
+                            aviones.get(i).ruta=null;
                             aviones.get(i).indiceRuta = 1;
                         }
                     } 
@@ -326,7 +326,7 @@ public class Juego extends BasicGameState {
                 }
             } else {//aca se hace el aumento de posición en x para que entren a la zona de vuelo
 
-                if (aviones.get(i).retraso > 20) {
+                if (aviones.get(i).retraso > 10) {
                     aviones.get(i).x++;
                     aviones.get(i).retraso = 0;
                 }
@@ -406,9 +406,9 @@ public class Juego extends BasicGameState {
      * @param encontrados
      *
      * Compara las posiciones de los aviones con las posiciones de casa sector
-     * del mapa con el fin de encontrar en que posicion exacta se encuentra el
-     * avion y las guarda en un objeto de tipo Point x= posición del avión en el
-     * mapa y= id del avión
+     * del mapa con el fin de encontrar en que posicion exacta donde se encuentra 
+     * el avión y las guarda en un objeto de tipo Point x= posición del avión en 
+     * el mapa y= id del avión
      */
     public void actualizarPosicionAviones(Sector[] sectores, Avion avion) {
         int inicio = 0;
@@ -419,22 +419,22 @@ public class Juego extends BasicGameState {
         while (medio < sectores.length) {
             if (inicio < (fin / 2) && sectores[inicio].intersects(avion)) {
                 if (elPrimero) {
-                    avion.posicionEnGrafoIzquierda = sectores[inicio].getId();
+                    avion.posicionEnGrafoIzquierdaArriba = sectores[inicio].getId();
                     elPrimero = false;
                 }
-                avion.posicionEnGrafoDerecha = sectores[inicio].getId();
+                avion.posicionEnGrafoDerechaAbajo = sectores[inicio].getId();
                 nodosAviones.add(new Point(sectores[inicio].getId(), avion.tipo));
             }
             if (sectores[medio].intersects(avion)) {
                 if (elPrimero) {
-                    avion.posicionEnGrafoIzquierda = sectores[medio].getId();
+                    avion.posicionEnGrafoIzquierdaArriba = sectores[medio].getId();
                     elPrimero = false;
                 }
-                avion.posicionEnGrafoDerecha = sectores[medio].getId();
+                avion.posicionEnGrafoDerechaAbajo = sectores[medio].getId();
                 nodosAviones.add(new Point(sectores[medio].getId(), avion.tipo));
             }
             if (!rMapa.intersects(avion)) {
-                avion.posicionEnGrafoIzquierda = -1;
+                avion.posicionEnGrafoIzquierdaArriba = -1;
             }
             inicio++;
             medio++;
@@ -445,7 +445,7 @@ public class Juego extends BasicGameState {
      *
      * @param sectores arreglo de sectores que representa el mapa en partes Este
      * método actualiza la posición de de aeropuertos en el grafo para generar
-     * los caminos y setea la variable posicionEnGrafoIzquierda del aeropuerto
+     * los caminos y setea la variable posicionEnGrafoIzquierdaArriba del aeropuerto
      */
     public void actualizarPosicionAeropuertos(Sector[] sectores) {
         for (int i = 0; i < aeropuertosMapa.size(); i++) {
@@ -486,8 +486,8 @@ public class Juego extends BasicGameState {
         int maximo = Integer.MAX_VALUE;
         String ruta = "";
         for (int j = 0; j < avion.destinos.size(); j++) {
-            String rutaTemporalLimiteIzquierda = grafo.encontrarRutaMinimaDijkstra(avion.posicionEnGrafoIzquierda, avion.destinos.get(j));
-            String rutaTemporalLimiteDerecha = grafo.encontrarRutaMinimaDijkstra(avion.posicionEnGrafoDerecha, avion.destinos.get(j));
+            String rutaTemporalLimiteIzquierda = grafo.encontrarRutaMinimaDijkstra(avion.posicionEnGrafoIzquierdaArriba, avion.destinos.get(j));
+            String rutaTemporalLimiteDerecha = grafo.encontrarRutaMinimaDijkstra(avion.posicionEnGrafoDerechaAbajo, avion.destinos.get(j));
             int minimoIzquierda = rutaTemporalLimiteIzquierda.length();
             int minimoDerecha = rutaTemporalLimiteDerecha.length();
 

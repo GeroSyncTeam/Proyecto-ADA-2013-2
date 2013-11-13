@@ -91,10 +91,6 @@ public class Configuracion extends BasicGameState {
         return 3;
     }
 
-    @Override
-    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-    }
-
     /**
      *
      * @param container
@@ -103,9 +99,8 @@ public class Configuracion extends BasicGameState {
      *
      * Se cargan todos los recursos que se usaran
      */
-    public void init2(GameContainer container, StateBasedGame sbg) throws SlickException {
-
-
+    @Override
+    public void init(GameContainer container, StateBasedGame sbg) throws SlickException {
         pulsacion = new Rectangle(2, 2);
         //------ Carga la fuente ---------
         try {
@@ -146,32 +141,44 @@ public class Configuracion extends BasicGameState {
 
         rBorrador = new Rectangle(XBORRADOR, YBORRADOR, 80, 50);
         dibujarSobreAtras = false;
-
-
-
     }
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
-        init2(container, game);
+        init(container, game);
     }
 
     @Override
     public void leave(GameContainer container, StateBasedGame game) throws SlickException {
-        pulsacion = null;
-        fuente = null;
-        fuente2 = null;
-        atras1 = null;
-        atras2 = null;
-        barraIzquierda = null;
-        marco = null;
-        rAeropuerto1 = null;
-        signos = null;
-        rAtras = null;
-        rMas = null;
-        rMenos = null;
-        rCuadricula = null;
-        rAeropuerto1 = null;
+//        linea = null;
+//        borrador = null;
+//        pulsacion = null;
+//        fuente = null;
+//        fuente2 = null;
+//        atras1 = null;
+//        atras2 = null;
+//        barraIzquierda = null;
+//        marco = null;
+//        aeropuerto1 = null;
+//        aeropuerto2 = null;
+//        aeropuerto3 = null;
+//        aeropuerto4 = null;
+//        rAeropuerto1 = null;
+//        signos = null;
+//        rAtras = null;
+//        rMas = null;
+//        rMenos = null;
+//        rCuadricula = null;
+//        rAeropuerto1 = null;
+//        rAeropuerto2 = null;
+//        rAeropuerto3 = null;
+//        rAeropuerto4 = null;
+//        lineaIzquierda = null;
+//        lineaDerecha = null;
+//        lineaAbajo = null;
+//        lineaArriba = null;
+//        rBorrador = null;
+        
     }
 
     /**
@@ -224,7 +231,7 @@ public class Configuracion extends BasicGameState {
 
         g.setFont(fuente2);
         g.setColor(Color.lightGray);
-        if (aeropuerto1Booleano) { 
+        if (aeropuerto1Booleano) {
             g.drawString("Aeropuerto Comercial", 20, 180);
             g.drawString("Pueden aterrizar:", 20, 220);
             g.drawString("Aviones de pasajeros", 20, 250);
@@ -233,7 +240,7 @@ public class Configuracion extends BasicGameState {
             g.drawString("Aeropuerto Comercial", 21, 180);
             g.drawString("Pueden aterrizar:", 21, 220);
             g.drawString("Aviones de pasajeros", 21, 250);
-            g.drawString("Aeroplanos",21, 280);
+            g.drawString("Aeroplanos", 21, 280);
         } else if (aeropuerto2Booleano) {
             g.drawString("Aeropuerto Carga", 20, 180);
             g.drawString("Pueden aterrizar:", 20, 220);
@@ -255,7 +262,7 @@ public class Configuracion extends BasicGameState {
             g.drawString("Base Aérea", 21, 180);
             g.drawString("Pueden aterrizar:", 21, 220);
             g.drawString("Aviones militares", 21, 250);
-            g.drawString("Aeroplanos",21, 280);
+            g.drawString("Aeroplanos", 21, 280);
         } else if (aeropuerto4Booleano) {
             g.drawString("Helipuerto", 20, 180);
             g.drawString("Pueden aterrizar:", 20, 220);
