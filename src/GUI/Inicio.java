@@ -137,7 +137,14 @@ public class Inicio extends BasicGameState {
             creditos1.draw(XBOTONES, YCREDITOS);
         }
     }
-
+    
+    /**
+     * 
+     * @param container
+     * @param game 
+     * Este método se encarga de crear el efecto rolover de los botones y
+     * esta pendiente si hay click para pasar a su respectivo gamestate
+     */
     private void cargarBotonesUpdate(GameContainer container, StateBasedGame game) {
         int x = container.getInput().getMouseX();
         int y = container.getInput().getMouseY();
