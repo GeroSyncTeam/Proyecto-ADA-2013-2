@@ -323,21 +323,25 @@ public class Configuracion extends BasicGameState {
         //--- Dibuja linea de partida ------------------------------------------
         if (pulsacion.intersects(lineaArriba)) {
             lineaArribaBooleano = true;
+            juego.linea=1;
         } else {
             lineaArribaBooleano = false;
         }
         if (pulsacion.intersects(lineaAbajo)) {
             lineaAbajoBooleano = true;
+             juego.linea=3;
         } else {
             lineaAbajoBooleano = false;
         }
         if (pulsacion.intersects(lineaIzquierda)) {
             lineaIzquierdaBooleano = true;
+             juego.linea=0;
         } else {
             lineaIzquierdaBooleano = false;
         }
         if (pulsacion.intersects(lineaDerecha)) {
             lineaDerechaBooleano = true;
+             juego.linea=2;
         } else {
             lineaDerechaBooleano = false;
         }

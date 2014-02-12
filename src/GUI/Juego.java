@@ -14,15 +14,13 @@ import java.awt.Rectangle;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.Timer;
 
-
-
-
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -34,6 +32,8 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Juego extends BasicGameState {
 
     public int minutos;
+    public int linea;
+    private int xSalida, ySalida;
     public CopyOnWriteArrayList<Aeropuerto> aeropuertosMapa;
     CopyOnWriteArrayList<Avion> aviones;
     CopyOnWriteArrayList<Point> nodosAviones;
@@ -49,7 +49,6 @@ public class Juego extends BasicGameState {
     public Juego() {
         minutos = 2;
         aeropuertosMapa = new CopyOnWriteArrayList<Aeropuerto>();
-
     }
 
     /**
@@ -72,6 +71,7 @@ public class Juego extends BasicGameState {
     public void init2(GameContainer container, StateBasedGame sbg) throws SlickException {
         // inicializa los sectores-------------------
         mapa = new Sector[225];
+        linea = 0;
         rMapa = new Rectangle(300, 60, 450, 450);
         int x;
         int y = 60;
@@ -88,7 +88,7 @@ public class Juego extends BasicGameState {
         }
         //-------------------------------------------
         grafo = new AlgoritmoDijkstra();
-        actualizarPosicionAeropuertos(mapa); //carga en el grafo en la posicion correcta el tipo de aeropuerto  especifico 
+        actualizarPosicionAeropuertos(mapa); //carga en el grafo en la posicion correcta el tipo de aeropuerto especifico 
         aviones = new CopyOnWriteArrayList<Avion>();
         nodosAviones = new CopyOnWriteArrayList<Point>();
         barraIzquierda = new Image("recursos/fondos/barra izquierda2.jpg");
@@ -128,8 +128,8 @@ public class Juego extends BasicGameState {
         fondo.draw(250, 0);
         int x1 = 300, y1 = 60, aumento = 0;
         for (int i = 0; i <= 15; i++) {
-            g.drawLine(x1 + aumento, y1, x1 + aumento, 510);
-            g.drawLine(x1, y1 + aumento, 750, y1 + aumento);
+            g.drawLine(x1 + aumento, y1, x1 + aumento, 510);//pinta lineas verticales
+            g.drawLine(x1, y1 + aumento, 750, y1 + aumento);//pinta lineas horizontales
             aumento += 30;
         }
         //------ Pinta aeropuertos del mapa 
@@ -141,7 +141,6 @@ public class Juego extends BasicGameState {
             aeropuertosMapa.get(i).getImagen().draw(x, y, ancho, alto);
         }
         //----------------------------------
-
 
         g.drawImage(avion.rutasSpriteSheet[5], avion.x, avion.y);
         g.drawImage(avion2.rutasSpriteSheet[5], avion2.x, avion2.y);
@@ -162,78 +161,77 @@ public class Juego extends BasicGameState {
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 
         // código de prueba avion1----------------------------------------------
-        if (container.getInput().isKeyPressed(Input.KEY_RIGHT)) {
-            avion.x += 4;
-            System.out.println(" x " + avion.x);
-        }
-        if (container.getInput().isKeyPressed(Input.KEY_DOWN)) {
-            avion.y += 4;
-            System.out.println(" y " + avion.y);
-        }
-        if (container.getInput().isKeyPressed(Input.KEY_UP)) {
-            avion.y -= 4;
-            System.out.println(" y " + avion.y);
-        }
-        if (container.getInput().isKeyPressed(Input.KEY_LEFT)) {
-            avion.x -= 4;
-            System.out.println(" x " + avion.x);
-        }
+//        if (container.getInput().isKeyPressed(Input.KEY_RIGHT)) {
+//            avion.x += 4;
+//            System.out.println(" x " + avion.x);
+//        }
+//        if (container.getInput().isKeyPressed(Input.KEY_DOWN)) {
+//            avion.y += 4;
+//            System.out.println(" y " + avion.y);
+//        }
+//        if (container.getInput().isKeyPressed(Input.KEY_UP)) {
+//            avion.y -= 4;
+//            System.out.println(" y " + avion.y);
+//        }
+//        if (container.getInput().isKeyPressed(Input.KEY_LEFT)) {
+//            avion.x -= 4;
+//            System.out.println(" x " + avion.x);
+//        }
+//        //----------------------------------------------------------------------
+//        // código de prueba avion2----------------------------------------------
+//        if (container.getInput().isKeyPressed(Input.KEY_D)) {
+//            avion2.x += 4;
+//            System.out.println(" x " + avion2.x);
+//        }
+//        if (container.getInput().isKeyPressed(Input.KEY_S)) {
+//            avion2.y += 4;
+//            System.out.println(" y " + avion2.y);
+//        }
+//        if (container.getInput().isKeyPressed(Input.KEY_W)) {
+//            avion2.y -= 4;
+//            System.out.println(" y " + avion2.y);
+//        }
+//        if (container.getInput().isKeyPressed(Input.KEY_A)) {
+//            avion2.x -= 4;
+//            System.out.println(" x " + avion2.x);
+//        }
+//        //----------------------------------------------------------------------
+//        // código de prueba avion4----------------------------------------------
+//        if (container.getInput().isKeyPressed(Input.KEY_H)) {
+//            avion4.x += 4;
+//
+//        }
+//        if (container.getInput().isKeyPressed(Input.KEY_G)) {
+//            avion4.y += 4;
+//
+//        }
+//        if (container.getInput().isKeyPressed(Input.KEY_T)) {
+//            avion4.y -= 4;
+//
+//        }
+//        if (container.getInput().isKeyPressed(Input.KEY_F)) {
+//            avion4.x -= 4;
+//
+//        }
+//        //----------------------------------------------------------------------
+//        // código de prueba avion4----------------------------------------------
+//        if (container.getInput().isKeyPressed(Input.KEY_L)) {
+//            avion3.x += 4;
+//
+//        }
+//        if (container.getInput().isKeyPressed(Input.KEY_K)) {
+//            avion3.y += 4;
+//
+//        }
+//        if (container.getInput().isKeyPressed(Input.KEY_I)) {
+//            avion3.y -= 4;
+//
+//        }
+//        if (container.getInput().isKeyPressed(Input.KEY_J)) {
+//            avion3.x -= 4;
+//
+//        }
         //----------------------------------------------------------------------
-        // código de prueba avion2----------------------------------------------
-        if (container.getInput().isKeyPressed(Input.KEY_D)) {
-            avion2.x += 4;
-            System.out.println(" x " + avion2.x);
-        }
-        if (container.getInput().isKeyPressed(Input.KEY_S)) {
-            avion2.y += 4;
-            System.out.println(" y " + avion2.y);
-        }
-        if (container.getInput().isKeyPressed(Input.KEY_W)) {
-            avion2.y -= 4;
-            System.out.println(" y " + avion2.y);
-        }
-        if (container.getInput().isKeyPressed(Input.KEY_A)) {
-            avion2.x -= 4;
-            System.out.println(" x " + avion2.x);
-        }
-        //----------------------------------------------------------------------
-        // código de prueba avion4----------------------------------------------
-        if (container.getInput().isKeyPressed(Input.KEY_H)) {
-            avion4.x += 4;
-
-        }
-        if (container.getInput().isKeyPressed(Input.KEY_G)) {
-            avion4.y += 4;
-
-        }
-        if (container.getInput().isKeyPressed(Input.KEY_T)) {
-            avion4.y -= 4;
-
-        }
-        if (container.getInput().isKeyPressed(Input.KEY_F)) {
-            avion4.x -= 4;
-
-        }
-        //----------------------------------------------------------------------
-        // código de prueba avion4----------------------------------------------
-        if (container.getInput().isKeyPressed(Input.KEY_L)) {
-            avion3.x += 4;
-
-        }
-        if (container.getInput().isKeyPressed(Input.KEY_K)) {
-            avion3.y += 4;
-
-        }
-        if (container.getInput().isKeyPressed(Input.KEY_I)) {
-            avion3.y -= 4;
-
-        }
-        if (container.getInput().isKeyPressed(Input.KEY_J)) {
-            avion3.x -= 4;
-
-        }
-        //----------------------------------------------------------------------
-
         nodosAviones.clear(); // limpia la lista que guarda en que posición de el mapa se encuentra cada avión
         //Reasignar posición a un avion en el mapa -----------------------------
         for (int i = 0; i < aviones.size(); i++) {
@@ -276,64 +274,63 @@ public class Juego extends BasicGameState {
 //                        origen = aviones.get(i).posicionEnGrafoDerechaAbajo;
 //                    }
 
-
                     if (indiceRuta < aviones.get(i).ruta.length) {
                         int destino = Integer.parseInt(aviones.get(i).ruta[indiceRuta]);//aca eescoje el destino
                         //verificar que no haya colisión
                         if (grafo.grafo[origen][destino] < Integer.MAX_VALUE) {
                             //dar paso
 //                            if (aviones.get(i).retraso > 100) {
-                                boolean sincronizadoX = true;
-                                if (aviones.get(i).x == mapa[destino].x) {
-                                    sincronizadoX = false;
+                            boolean sincronizadoX = true;
+                            if (aviones.get(i).x == mapa[destino].x) {
+                                sincronizadoX = false;
+                            }
+                            if (sincronizadoX) {
+                                if (aviones.get(i).x < mapa[destino].x) {
+                                    aviones.get(i).x++;
+                                } else {
+                                    aviones.get(i).x--;
                                 }
-                                if (sincronizadoX) {
-                                    if (aviones.get(i).x < mapa[destino].x) {
-                                        aviones.get(i).x++;
-                                    } else {
-                                        aviones.get(i).x--;
-                                    }
+                            }
+                            boolean sincronizadoY = true;
+                            if (aviones.get(i).y == mapa[destino].y) {
+                                sincronizadoY = false;
+                            }
+                            if (sincronizadoY) {
+                                if (aviones.get(i).y < mapa[destino].y) {
+                                    aviones.get(i).y++;
+                                } else {
+                                    aviones.get(i).y--;
                                 }
-                                boolean sincronizadoY = true;
-                                if (aviones.get(i).y == mapa[destino].y) {
-                                    sincronizadoY = false;
-                                }
-                                if (sincronizadoY) {
-                                    if (aviones.get(i).y < mapa[destino].y) {
-                                        aviones.get(i).y++;
-                                    } else {
-                                        aviones.get(i).y--;
-                                    }
-                                }
-                                if (!sincronizadoX && !sincronizadoY) {
-                                    aviones.get(i).indiceRuta++;
-                                }
+                            }
+                            if (!sincronizadoX && !sincronizadoY) {
+                                aviones.get(i).indiceRuta++;
+                            }
 
-                                aviones.get(i).retraso = 0;
+                            aviones.get(i).retraso = 0;
 //                            }
                             //fin dar paso
                         } else {///se supone que es cuando hay colisión
                             System.out.println("recalculo ruta del avion de tipo " + aviones.get(i).tipo);
-                            aviones.get(i).ruta=null;
+                            aviones.get(i).ruta = null;
                             aviones.get(i).indiceRuta = 1;
                         }
-                    } 
+                    }
                 } else {//si la ruta del avión es nula
                     calcularRuta(aviones.get(i));
                     System.out.println(" ruta del avion de tipo " + aviones.get(i).tipo);
-                    
+
                 }
             } else {//aca se hace el aumento de posición en x para que entren a la zona de vuelo
 
 //                if (aviones.get(i).retraso > 100) {
-                    aviones.get(i).x++;
-                    aviones.get(i).retraso = 0;
+                aviones.get(i).x++;
+                aviones.get(i).retraso = 0;
 //                }
             }
         }
         //codigo de prueba------------------------------------------------------
         if (container.getInput().isKeyPressed(Input.KEY_E)) {
-            
+
             for (int j = 0; j < aviones.size(); j++) {
                 System.out.println("----------------------------------");
                 for (int i = 0; i < aviones.get(j).ruta.length; i++) {
@@ -341,7 +338,7 @@ public class Juego extends BasicGameState {
                 }
                 System.out.println("");
             }
-            
+
         }
         //----------------------------------------------------------------------
         //-------------- Muestra el grafo (temporal) ---------------------------
@@ -405,9 +402,9 @@ public class Juego extends BasicGameState {
      * @param encontrados
      *
      * Compara las posiciones de los aviones con las posiciones de casa sector
-     * del mapa con el fin de encontrar en que posicion exacta donde se encuentra 
-     * el avión y las guarda en un objeto de tipo Point x= posición del avión en 
-     * el mapa y= id del avión
+     * del mapa con el fin de encontrar en que posicion exacta donde se
+     * encuentra el avión y las guarda en un objeto de tipo Point x= posición
+     * del avión en el mapa y= id del avión
      */
     public void actualizarPosicionAviones(Sector[] sectores, Avion avion) {
         int inicio = 0;
@@ -444,7 +441,8 @@ public class Juego extends BasicGameState {
      *
      * @param sectores arreglo de sectores que representa el mapa en partes Este
      * método actualiza la posición de de aeropuertos en el grafo para generar
-     * los caminos y setea la variable posicionEnGrafoIzquierdaArriba del aeropuerto
+     * los caminos y setea la variable posicionEnGrafoIzquierdaArriba del
+     * aeropuerto
      */
     public void actualizarPosicionAeropuertos(Sector[] sectores) {
         for (int i = 0; i < aeropuertosMapa.size(); i++) {
@@ -503,5 +501,43 @@ public class Juego extends BasicGameState {
             }
         }
         avion.ruta = ruta.split(" ");
+    }
+
+    public Avion crearAvion() {
+//Avion a = generarXY(new Avion(linea, linea, linea));
+        return null;
+    }
+
+    /**
+     * Inicio del mapa aereo X=300 XFinal=750 -- Y=60 YFinal=510 (250,0) inicio
+     * campo (765,540)
+     * 
+     * Recibe un avion el cual le va a indicar sus posiciones xy respecto a la 
+     * linea de salida
+     * 
+     * 
+     *
+     */
+    public Avion generarXY(Avion a) {
+        switch (linea) {
+            case 0: // izquierda
+                a.x = 0;
+                a.y = (int) (Math.round(Math.random() * 520));
+                break;
+            case 1: // Arriba                
+                a.x = (int) (Math.round(Math.random() * 465)) + 300;
+                a.y = 0;
+                break;
+            case 2: // Derecha
+                a.x = 765;
+                a.y = (int) (Math.round(Math.random() * 520));
+                break;
+            case 3: // Abajo
+                a.x = (int) (Math.round(Math.random() * 465)) + 300;
+                a.y = 540;
+                break;
+        }
+        
+        return a;
     }
 }
