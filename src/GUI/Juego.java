@@ -283,7 +283,7 @@ public class Juego extends BasicGameState {
                         //verificar que no haya colisión
                         if (grafo.grafo[origen][destino] < Integer.MAX_VALUE) {
                             //dar paso
-                            if (aviones.get(i).retraso > 10) {
+//                            if (aviones.get(i).retraso > 100) {
                                 boolean sincronizadoX = true;
                                 if (aviones.get(i).x == mapa[destino].x) {
                                     sincronizadoX = false;
@@ -311,7 +311,7 @@ public class Juego extends BasicGameState {
                                 }
 
                                 aviones.get(i).retraso = 0;
-                            }
+//                            }
                             //fin dar paso
                         } else {///se supone que es cuando hay colisión
                             System.out.println("recalculo ruta del avion de tipo " + aviones.get(i).tipo);
@@ -326,10 +326,10 @@ public class Juego extends BasicGameState {
                 }
             } else {//aca se hace el aumento de posición en x para que entren a la zona de vuelo
 
-                if (aviones.get(i).retraso > 10) {
+//                if (aviones.get(i).retraso > 100) {
                     aviones.get(i).x++;
                     aviones.get(i).retraso = 0;
-                }
+//                }
             }
         }
         //codigo de prueba------------------------------------------------------
