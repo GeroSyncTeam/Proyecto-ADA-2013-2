@@ -80,7 +80,6 @@ public class Juego extends BasicGameState {
             x = 300;
             for (int j = 0; j < 15; j++) {
                 mapa[id] = new Sector(id, x, y);
-
                 id++;
                 x += 30;
             }
