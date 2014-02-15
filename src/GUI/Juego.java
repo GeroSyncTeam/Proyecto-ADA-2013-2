@@ -10,6 +10,8 @@ import clases.Avion;
 import clases.Sector;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Hashtable;
+
 
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.Timer;
@@ -34,7 +36,10 @@ public class Juego extends BasicGameState {
     public int minutos;
     public int linea;
     private int xSalida, ySalida;
+    int ordenSalida[];
+    int ordenDibujo[];
     public CopyOnWriteArrayList<Aeropuerto> aeropuertosMapa;
+    Hashtable<Integer,Avion> contenedorAviones;
     CopyOnWriteArrayList<Avion> aviones;
     CopyOnWriteArrayList<Point> nodosAviones;
     Image barraIzquierda, fondo;
@@ -69,8 +74,7 @@ public class Juego extends BasicGameState {
      */
     public void init2(GameContainer container, StateBasedGame sbg) throws SlickException {
         // inicializa los sectores-------------------
-        mapa = new Sector[225];
-        
+        mapa = new Sector[225];   
         rMapa = new Rectangle(300, 60, 450, 450);
         int x;
         int y = 60;
@@ -85,6 +89,9 @@ public class Juego extends BasicGameState {
 
             y += 30;
         }
+        contenedorAviones=new Hashtable<Integer,Avion>();
+        ordenSalida= new int[contenedorAviones.size()];
+        ordenDibujo= new int[contenedorAviones.size()];
         //-------------------------------------------
         grafo = new AlgoritmoDijkstra();
         actualizarPosicionAeropuertos(mapa); //carga en el grafo en la posicion correcta el tipo de aeropuerto especifico 
@@ -159,77 +166,6 @@ public class Juego extends BasicGameState {
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 
-        // código de prueba avion1----------------------------------------------
-//        if (container.getInput().isKeyPressed(Input.KEY_RIGHT)) {
-//            avion.x += 4;
-//            System.out.println(" x " + avion.x);
-//        }
-//        if (container.getInput().isKeyPressed(Input.KEY_DOWN)) {
-//            avion.y += 4;
-//            System.out.println(" y " + avion.y);
-//        }
-//        if (container.getInput().isKeyPressed(Input.KEY_UP)) {
-//            avion.y -= 4;
-//            System.out.println(" y " + avion.y);
-//        }
-//        if (container.getInput().isKeyPressed(Input.KEY_LEFT)) {
-//            avion.x -= 4;
-//            System.out.println(" x " + avion.x);
-//        }
-//        //----------------------------------------------------------------------
-//        // código de prueba avion2----------------------------------------------
-//        if (container.getInput().isKeyPressed(Input.KEY_D)) {
-//            avion2.x += 4;
-//            System.out.println(" x " + avion2.x);
-//        }
-//        if (container.getInput().isKeyPressed(Input.KEY_S)) {
-//            avion2.y += 4;
-//            System.out.println(" y " + avion2.y);
-//        }
-//        if (container.getInput().isKeyPressed(Input.KEY_W)) {
-//            avion2.y -= 4;
-//            System.out.println(" y " + avion2.y);
-//        }
-//        if (container.getInput().isKeyPressed(Input.KEY_A)) {
-//            avion2.x -= 4;
-//            System.out.println(" x " + avion2.x);
-//        }
-//        //----------------------------------------------------------------------
-//        // código de prueba avion4----------------------------------------------
-//        if (container.getInput().isKeyPressed(Input.KEY_H)) {
-//            avion4.x += 4;
-//
-//        }
-//        if (container.getInput().isKeyPressed(Input.KEY_G)) {
-//            avion4.y += 4;
-//
-//        }
-//        if (container.getInput().isKeyPressed(Input.KEY_T)) {
-//            avion4.y -= 4;
-//
-//        }
-//        if (container.getInput().isKeyPressed(Input.KEY_F)) {
-//            avion4.x -= 4;
-//
-//        }
-//        //----------------------------------------------------------------------
-//        // código de prueba avion4----------------------------------------------
-//        if (container.getInput().isKeyPressed(Input.KEY_L)) {
-//            avion3.x += 4;
-//
-//        }
-//        if (container.getInput().isKeyPressed(Input.KEY_K)) {
-//            avion3.y += 4;
-//
-//        }
-//        if (container.getInput().isKeyPressed(Input.KEY_I)) {
-//            avion3.y -= 4;
-//
-//        }
-//        if (container.getInput().isKeyPressed(Input.KEY_J)) {
-//            avion3.x -= 4;
-//
-//        }
         //----------------------------------------------------------------------
         nodosAviones.clear(); // limpia la lista que guarda en que posición de el mapa se encuentra cada avión
         //Reasignar posición a un avion en el mapa -----------------------------
@@ -540,5 +476,13 @@ public class Juego extends BasicGameState {
         }
         
         return a;
+    }
+   
+    public int [] obtenerVelocidades(){
+        
+        for(java.util.Map.Entry e: contenedorAviones.entrySet()){
+            
+        }
+        return null;
     }
 }
