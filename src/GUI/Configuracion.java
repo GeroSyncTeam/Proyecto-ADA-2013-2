@@ -150,34 +150,34 @@ public class Configuracion extends BasicGameState {
 
     @Override
     public void leave(GameContainer container, StateBasedGame game) throws SlickException {
-//        linea = null;
-//        borrador = null;
-//        pulsacion = null;
-//        fuente = null;
-//        fuente2 = null;
-//        atras1 = null;
-//        atras2 = null;
-//        barraIzquierda = null;
-//        marco = null;
-//        aeropuerto1 = null;
-//        aeropuerto2 = null;
-//        aeropuerto3 = null;
-//        aeropuerto4 = null;
-//        rAeropuerto1 = null;
-//        signos = null;
-//        rAtras = null;
-//        rMas = null;
-//        rMenos = null;
-//        rCuadricula = null;
-//        rAeropuerto1 = null;
-//        rAeropuerto2 = null;
-//        rAeropuerto3 = null;
-//        rAeropuerto4 = null;
-//        lineaIzquierda = null;
-//        lineaDerecha = null;
-//        lineaAbajo = null;
-//        lineaArriba = null;
-//        rBorrador = null;
+        linea = null;
+        borrador = null;
+        pulsacion = null;
+        fuente = null;
+        fuente2 = null;
+        atras1 = null;
+        atras2 = null;
+        barraIzquierda = null;
+        marco = null;
+        aeropuerto1 = null;
+        aeropuerto2 = null;
+        aeropuerto3 = null;
+        aeropuerto4 = null;
+        rAeropuerto1 = null;
+        signos = null;
+        rAtras = null;
+        rMas = null;
+        rMenos = null;
+        rCuadricula = null;
+        rAeropuerto1 = null;
+        rAeropuerto2 = null;
+        rAeropuerto3 = null;
+        rAeropuerto4 = null;
+        lineaIzquierda = null;
+        lineaDerecha = null;
+        lineaAbajo = null;
+        lineaArriba = null;
+        rBorrador = null;
 
     }
 
@@ -318,29 +318,29 @@ public class Configuracion extends BasicGameState {
         pulsacionY = container.getInput().getMouseY();
         pulsacion.setBounds(pulsacionX, pulsacionY, 2, 2);
         //--- Dibuja linea de partida ------------------------------------------
-        if (pulsacion.intersects(lineaArriba)) {
-            lineaArribaBooleano = true;
-            juego.linea = 1;
-        } else {
-            lineaArribaBooleano = false;
-        }
-        if (pulsacion.intersects(lineaAbajo)) {
-            lineaAbajoBooleano = true;
-            juego.linea = 3;
-        } else {
-            lineaAbajoBooleano = false;
-        }
         if (pulsacion.intersects(lineaIzquierda)) {
             lineaIzquierdaBooleano = true;
             juego.linea = 0;
         } else {
             lineaIzquierdaBooleano = false;
         }
+        if (pulsacion.intersects(lineaArriba)) {
+            lineaArribaBooleano = true;
+            juego.linea = 1;
+        } else {
+            lineaArribaBooleano = false;
+        }
         if (pulsacion.intersects(lineaDerecha)) {
             lineaDerechaBooleano = true;
             juego.linea = 2;
         } else {
             lineaDerechaBooleano = false;
+        }
+        if (pulsacion.intersects(lineaAbajo)) {
+            lineaAbajoBooleano = true;
+            juego.linea = 3;
+        } else {
+            lineaAbajoBooleano = false;
         }
         //------ Carga el botón Atrás ------------------------------------------
         if (pulsacion.intersects(rAtras)) {

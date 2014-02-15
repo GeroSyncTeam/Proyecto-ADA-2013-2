@@ -46,8 +46,7 @@ public class Juego extends BasicGameState {
     Timer tiempo;
 //    Animation a1;
 
-    public Juego() {
-        minutos = 2;
+    public Juego() {     
         aeropuertosMapa = new CopyOnWriteArrayList<Aeropuerto>();
     }
 
@@ -71,7 +70,7 @@ public class Juego extends BasicGameState {
     public void init2(GameContainer container, StateBasedGame sbg) throws SlickException {
         // inicializa los sectores-------------------
         mapa = new Sector[225];
-        linea = 0;
+        
         rMapa = new Rectangle(300, 60, 450, 450);
         int x;
         int y = 60;
@@ -371,6 +370,8 @@ public class Juego extends BasicGameState {
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
         init2(container, game);
+        System.out.println("minutos "+minutos);
+        System.out.println("linea "+linea);
     }
 
     /**
