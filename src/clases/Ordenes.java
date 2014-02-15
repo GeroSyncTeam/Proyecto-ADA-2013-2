@@ -12,4 +12,10 @@ public class Ordenes {
 
     int llave;
     double valor;
+
+    public Ordenes(int llave, double valor) {
+        this.llave = llave;
+        this.valor = valor;
+    }
+    
 }

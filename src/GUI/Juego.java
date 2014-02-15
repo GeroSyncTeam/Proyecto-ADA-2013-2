@@ -7,6 +7,7 @@ package GUI;
 import clases.Aeropuerto;
 import clases.AlgoritmoDijkstra;
 import clases.Avion;
+import clases.Ordenes;
 import clases.Sector;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -39,7 +40,7 @@ public class Juego extends BasicGameState {
     int ordenSalida[];
     int ordenDibujo[];
     public CopyOnWriteArrayList<Aeropuerto> aeropuertosMapa;
-    Hashtable<Integer,Avion> contenedorAviones;
+    Hashtable<Integer, Avion> contenedorAviones;
     CopyOnWriteArrayList<Avion> aviones;
     CopyOnWriteArrayList<Point> nodosAviones;
     Image barraIzquierda, fondo;
@@ -51,7 +52,7 @@ public class Juego extends BasicGameState {
     Timer tiempo;
 //    Animation a1;
 
-    public Juego() {     
+    public Juego() {
         aeropuertosMapa = new CopyOnWriteArrayList<Aeropuerto>();
     }
 
@@ -74,7 +75,7 @@ public class Juego extends BasicGameState {
      */
     public void init2(GameContainer container, StateBasedGame sbg) throws SlickException {
         // inicializa los sectores-------------------
-        mapa = new Sector[225];   
+        mapa = new Sector[225];
         rMapa = new Rectangle(300, 60, 450, 450);
         int x;
         int y = 60;
@@ -89,9 +90,9 @@ public class Juego extends BasicGameState {
 
             y += 30;
         }
-        contenedorAviones=new Hashtable<Integer,Avion>();
-        ordenSalida= new int[contenedorAviones.size()];
-        ordenDibujo= new int[contenedorAviones.size()];
+        contenedorAviones = new Hashtable<Integer, Avion>();
+        ordenSalida = new int[contenedorAviones.size()];
+        ordenDibujo = new int[contenedorAviones.size()];
         //-------------------------------------------
         grafo = new AlgoritmoDijkstra();
         actualizarPosicionAeropuertos(mapa); //carga en el grafo en la posicion correcta el tipo de aeropuerto especifico 
@@ -306,8 +307,8 @@ public class Juego extends BasicGameState {
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
         init2(container, game);
-        System.out.println("minutos "+minutos);
-        System.out.println("linea "+linea);
+        System.out.println("minutos " + minutos);
+        System.out.println("linea " + linea);
     }
 
     /**
@@ -448,11 +449,11 @@ public class Juego extends BasicGameState {
     /**
      * Inicio del mapa aereo X=300 XFinal=750 -- Y=60 YFinal=510 (250,0) inicio
      * campo (765,540)
-     * 
-     * Recibe un avion el cual le va a indicar sus posiciones xy respecto a la 
+     *
+     * Recibe un avion el cual le va a indicar sus posiciones xy respecto a la
      * linea de salida
-     * 
-     * 
+     *
+     *
      *
      */
     public Avion generarXY(Avion a) {
@@ -474,15 +475,19 @@ public class Juego extends BasicGameState {
                 a.y = 540;
                 break;
         }
-        
+
         return a;
     }
-   
-    public int [] obtenerVelocidades(){
-        
-        for(java.util.Map.Entry e: contenedorAviones.entrySet()){
-            
+
+    public Ordenes[] obtenerVelocidades(int caso) {
+        Ordenes[] o = new Ordenes[contenedorAviones.size()];
+        for (int i = 0; i < contenedorAviones.size(); i++) {
+            if (caso == 0) {
+                o[i] = new Ordenes(i, contenedorAviones.get(i).velocidad);
+            } else {
+                o[i] = new Ordenes(i, contenedorAviones.get(i).altura);
+            }
         }
-        return null;
+        return o;
     }
 }
