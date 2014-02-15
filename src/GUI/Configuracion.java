@@ -342,6 +342,12 @@ public class Configuracion extends BasicGameState {
         } else {
             lineaAbajoBooleano = false;
         }
+        if (pulsacion.intersects(lineaAbajo)) {
+            lineaAbajoBooleano = true;
+            juego.linea = 3;
+        } else {
+            lineaAbajoBooleano = false;
+        }
         //------ Carga el botón Atrás ------------------------------------------
         if (pulsacion.intersects(rAtras)) {
             dibujarSobreAtras = true;

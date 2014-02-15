@@ -11,9 +11,7 @@ import clases.Ordenes;
 import clases.Sector;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.Arrays;
 import java.util.Hashtable;
-
 
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.Timer;
@@ -91,7 +89,8 @@ public class Juego extends BasicGameState {
 
             y += 30;
         }
-        
+        contenedorAviones = new Hashtable<Integer, Avion>();
+
         //-------------------------------------------
         contenedorAviones = new Hashtable<Integer, Avion>();
         //inicializa, crea y ordena vectores de salida y dibujado
@@ -199,7 +198,7 @@ public class Juego extends BasicGameState {
         //----------------------------------------------------------------------
         //justo en esta parte debo elegir la ruta para cada avión
         for (int i = 0; i < aviones.size(); i++) {
-            aviones.get(i).retraso++;
+            aviones.get(i).setRetraso(aviones.get(i).getRetraso() + 1);
             if (rMapa.intersects(aviones.get(i))) {
                 if (aviones.get(i).ruta != null) {// si no es nula la    
 //                    for (int j = 0; j < aviones.get(i).ruta.length; j++) {
@@ -244,7 +243,7 @@ public class Juego extends BasicGameState {
                                 }
                             }
                             if (!sincronizadoX && !sincronizadoY) {
-                                aviones.get(i).indiceRuta++;
+                                aviones.get(i).setIndiceRuta(aviones.get(i).getIndiceRuta() + 1);
                             }
 
                             aviones.get(i).retraso = 0;
@@ -446,9 +445,31 @@ public class Juego extends BasicGameState {
         avion.ruta = ruta.split(" ");
     }
 
-    public Avion crearAvion() {
-//Avion a = generarXY(new Avion(linea, linea, linea));
-        return null;
+    
+    /**
+     * Busca que tipo de aviones se puden crear y que cantidad
+     * les asigna la linea de salida y los añade al hash de aviones
+     */
+    public void crearAviones() {
+        int[] tipoaviones = new int[2];
+        int cantidadAviones = 4 * minutos;
+        Avion avion = new Avion();
+
+        for (int i = 0; i < cantidadAviones; i++) {
+            tipoaviones = avion.ConsultaAvionesAeroupuerto(idCrearAvionSegunAeropuertos());
+        }
+
+        avion = new Avion(tipoaviones[(int) Math.round(Math.random())], 0, 0);
+        avion = generarXY(avion);
+        contenedorAviones.put(contenedorAviones.size(), avion);;       
+    }
+
+    public int idCrearAvionSegunAeropuertos() {
+        int idAeropuerto = -1;
+        do {
+            idAeropuerto = (int) Math.round(Math.random() * 4);
+        } while (tipoAeropuerto[idAeropuerto] >= 0);
+        return idAeropuerto;
     }
 
     /**
@@ -535,26 +556,12 @@ public class Juego extends BasicGameState {
         Ordenes aux[] = Arrays.copyOfRange(A, 0, r + 1);
         // hace una copia del arreglo original en el aux
 
-        int i = p; //inicio lado izquierdo
-        int j = q + 1;//inicio lado derecho
-        int k = p;//indice del arreglo aux para ordenar
-        // copia el valor mas pequeño sea de la izquierda o la derecha 
-        //en el arreglo original
-        while (i <= q && j <= r) {
-            if (aux[i].valor >= aux[j].valor) {
-                A[k] = aux[i];
-                i++;
-            } else {
-                A[k] = aux[j];
-                j++;
-            }
-            k++;
+    public int[] obtenerVelocidades() {
+
+        for (java.util.Map.Entry e : contenedorAviones.entrySet()) {
+
         }
-        // copia el resto del lado izquierdo del aux en el arreglo A
-        while (i <= q) {
-            A[k] = aux[i];
-            k++;
-            i++;
-        }
+        return null;
     }
+
 }
