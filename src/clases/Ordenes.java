@@ -10,8 +10,8 @@ package clases;
  */
 public class Ordenes {
 
-    int llave;
-    double valor;
+    public int llave;
+    public double valor;
 
     public Ordenes(int llave, double valor) {
         this.llave = llave;

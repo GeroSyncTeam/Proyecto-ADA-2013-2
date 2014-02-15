@@ -11,6 +11,7 @@ import clases.Ordenes;
 import clases.Sector;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Arrays;
 import java.util.Hashtable;
 
 
@@ -37,8 +38,8 @@ public class Juego extends BasicGameState {
     public int minutos;
     public int linea;
     private int xSalida, ySalida;
-    int ordenSalida[];
-    int ordenDibujo[];
+    Ordenes ordenSalida[];
+    Ordenes ordenDibujo[];
     public CopyOnWriteArrayList<Aeropuerto> aeropuertosMapa;
     Hashtable<Integer, Avion> contenedorAviones;
     CopyOnWriteArrayList<Avion> aviones;
@@ -90,10 +91,14 @@ public class Juego extends BasicGameState {
 
             y += 30;
         }
-        contenedorAviones = new Hashtable<Integer, Avion>();
-        ordenSalida = new int[contenedorAviones.size()];
-        ordenDibujo = new int[contenedorAviones.size()];
+        
         //-------------------------------------------
+        contenedorAviones = new Hashtable<Integer, Avion>();
+        //inicializa, crea y ordena vectores de salida y dibujado
+        obtenerVariables();
+        mergeSort(ordenSalida, 0, ordenSalida.length-1);
+        mergeSort(ordenDibujo, 0, ordenDibujo.length-1);
+        //-----------------------------------------------------
         grafo = new AlgoritmoDijkstra();
         actualizarPosicionAeropuertos(mapa); //carga en el grafo en la posicion correcta el tipo de aeropuerto especifico 
         aviones = new CopyOnWriteArrayList<Avion>();
@@ -479,15 +484,77 @@ public class Juego extends BasicGameState {
         return a;
     }
 
-    public Ordenes[] obtenerVelocidades(int caso) {
-        Ordenes[] o = new Ordenes[contenedorAviones.size()];
+    public void obtenerVariables() {
+        ordenSalida = new Ordenes[contenedorAviones.size()];
+        ordenDibujo = new Ordenes[contenedorAviones.size()];
         for (int i = 0; i < contenedorAviones.size(); i++) {
-            if (caso == 0) {
-                o[i] = new Ordenes(i, contenedorAviones.get(i).velocidad);
-            } else {
-                o[i] = new Ordenes(i, contenedorAviones.get(i).altura);
-            }
+            ordenSalida[i] = new Ordenes(i, contenedorAviones.get(i).velocidad);
+            ordenDibujo[i] = new Ordenes(i, contenedorAviones.get(i).altura);
         }
-        return o;
+    }
+
+    /**
+     * @param A el arreglo a ordenar
+     * @param p indice desde donde comienza el ordenamiento generalmente es 0
+     * @param r indice del final del arreglo
+     *
+     * Este método verifica si el arreglo no esta ordenado, y en caso de no
+     * estarlo lo ordena dividiendo el tamaño del arreglo de manera recursiva y
+     * haciendo un llamado al metodo merge encargado de mezclar las soluciones
+     * que va entregando la recurción
+     *
+     * T(n) = 2T(n/2) + cn T(n) = O(nlg(n))
+     */
+    private static void mergeSort(Ordenes[] A, int p, int r) {
+        // verifica si p es menor que r, sino se ordena el arreglo
+        if (p < r) {
+            // obtiene el indice del elemento en la mitad
+            int q = (p + r) / 2;
+            // ordena el lado izquierdo del arreglo
+            mergeSort(A, p, q);
+            // ordena el lado derecho del arreglo
+            mergeSort(A, q + 1, r);
+            // convina los dos lados del arreglo
+            merge(A, p, q, r);
+        }
+    }
+
+    /**
+     * @param A el arreglo a ordenar
+     * @param p indice desde donde comienza el ordenamiento generalmente es 0
+     * @param q indice que marca la mitad del arreglo
+     * @param r indice del final del arreglo
+     *
+     * Este método utilizando una copia del arreglo A divide el arreglo en dos y
+     * verifica que el orden que tienen los números sea el correcto, de lo
+     * contrario los acomoda de menor a mayor mediante un proceso de mezcla
+     *
+     * T(n)= cn T(n)=O(n)
+     */
+    private static void merge(Ordenes A[], int p, int q, int r) {
+        Ordenes aux[] = Arrays.copyOfRange(A, 0, r + 1);
+        // hace una copia del arreglo original en el aux
+
+        int i = p; //inicio lado izquierdo
+        int j = q + 1;//inicio lado derecho
+        int k = p;//indice del arreglo aux para ordenar
+        // copia el valor mas pequeño sea de la izquierda o la derecha 
+        //en el arreglo original
+        while (i <= q && j <= r) {
+            if (aux[i].valor >= aux[j].valor) {
+                A[k] = aux[i];
+                i++;
+            } else {
+                A[k] = aux[j];
+                j++;
+            }
+            k++;
+        }
+        // copia el resto del lado izquierdo del aux en el arreglo A
+        while (i <= q) {
+            A[k] = aux[i];
+            k++;
+            i++;
+        }
     }
 }
