@@ -178,7 +178,7 @@ public class Configuracion extends BasicGameState {
 //        lineaAbajo = null;
 //        lineaArriba = null;
 //        rBorrador = null;
-        
+
     }
 
     /**
@@ -273,8 +273,6 @@ public class Configuracion extends BasicGameState {
             g.drawString("Helicópteros", 21, 250);
         }
 
-
-
         g.setColor(Color.blue);
         aeropuerto1.draw(XA1, YA1, 90, 90);
         aeropuerto2.draw(XA2, YA2, 90, 90);
@@ -302,7 +300,6 @@ public class Configuracion extends BasicGameState {
         //------ pintar Borrador ------------
 
         //-----------------------------------
-
     }
 
     /**
@@ -323,25 +320,25 @@ public class Configuracion extends BasicGameState {
         //--- Dibuja linea de partida ------------------------------------------
         if (pulsacion.intersects(lineaArriba)) {
             lineaArribaBooleano = true;
-            juego.linea=1;
+            juego.linea = 1;
         } else {
             lineaArribaBooleano = false;
         }
         if (pulsacion.intersects(lineaAbajo)) {
             lineaAbajoBooleano = true;
-             juego.linea=3;
+            juego.linea = 3;
         } else {
             lineaAbajoBooleano = false;
         }
         if (pulsacion.intersects(lineaIzquierda)) {
             lineaIzquierdaBooleano = true;
-             juego.linea=0;
+            juego.linea = 0;
         } else {
             lineaIzquierdaBooleano = false;
         }
         if (pulsacion.intersects(lineaDerecha)) {
             lineaDerechaBooleano = true;
-             juego.linea=2;
+            juego.linea = 2;
         } else {
             lineaDerechaBooleano = false;
         }
@@ -402,8 +399,18 @@ public class Configuracion extends BasicGameState {
 
 // Evento de click--------------------------------------------------------------
         if (container.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-            
-            if (aeropuerto1Booleano && !verificarOcupado()) {
+
+            pulsacionX = container.getInput().getMouseX();
+            pulsacionY = container.getInput().getMouseY();
+            pulsacion.setBounds(pulsacionX, pulsacionY, 2, 2);
+
+            System.out.println("Pulsacion: x: " + pulsacion.x + " y: " + pulsacion.y);
+            System.out.println("Aeropueto1: " + aeropuerto1Booleano);
+            System.out.println("Aeropueto2: " + aeropuerto2Booleano);
+            System.out.println("Aeropueto3: " + aeropuerto3Booleano);
+            System.out.println("Aeropueto4: " + aeropuerto4Booleano);
+
+            if (aeropuerto1Booleano) {
                 Xseleccion = XA1;
                 Yseleccion = YA1;
                 rutaImagenTemporal = "recursos/fondos/aeropuerto.png";
@@ -413,7 +420,7 @@ public class Configuracion extends BasicGameState {
                 pintarAeropuerto = true;
                 tipoAeropuerto = 6; //esta linea es importante cambia el tipo de aeropuerto
             }
-            if (aeropuerto2Booleano && !verificarOcupado()) {
+            if (aeropuerto2Booleano) {
                 Xseleccion = XA2;
                 Yseleccion = YA2;
                 rutaImagenTemporal = "recursos/fondos/a2.jpg";
@@ -423,7 +430,7 @@ public class Configuracion extends BasicGameState {
                 pintarAeropuerto = true;
                 tipoAeropuerto = 7; //esta linea es importante cambia el tipo de aeropuerto
             }
-            if (aeropuerto3Booleano && !verificarOcupado()) {
+            if (aeropuerto3Booleano) {
                 Xseleccion = XA3;
                 Yseleccion = YA3;
                 rutaImagenTemporal = "recursos/fondos/a3.jpg";
@@ -433,7 +440,7 @@ public class Configuracion extends BasicGameState {
                 pintarAeropuerto = true;
                 tipoAeropuerto = 8; //esta linea es importante cambia el tipo de aeropuerto
             }
-            if (aeropuerto4Booleano && !verificarOcupado()) {
+            if (aeropuerto4Booleano) {
                 Xseleccion = XA4;
                 Yseleccion = YA4;
                 rutaImagenTemporal = "recursos/fondos/a4.jpg";
@@ -480,27 +487,31 @@ public class Configuracion extends BasicGameState {
                     juego.minutos--;
                 }
             }
-            
+
             if (borradorBooleano) {//esta pendiente la prueba
                 pintarAeropuerto = false;
                 imgTemporal = null;
                 imgTemporal = new Image("recursos/fondos/borrador.png");
                 pintarBorradorTemporal = true;
             }
+
             if (cuadriculaBooleano && pintarAeropuerto) {
                 int x = pulsacionX;
                 int y = pulsacionY;
-                while (x % 30 != 0 || y % 30 != 0) {
-                    if (x % 30 != 0) {
-                        x--;
+
+                if (!verificarOcupado(container)) {
+                    while (x % 30 != 0 || y % 30 != 0) {
+                        if (x % 30 != 0) {
+                            x--;
+                        }
+                        if (y % 30 != 0) {
+                            y--;
+                        }
                     }
-                    if (y % 30 != 0) {
-                        y--;
-                    }
+                    imgTemporal = null;
+                    juego.aeropuertosMapa.add(new Aeropuerto(rutaImagenTemporal, tipoAeropuerto, x, y));
                 }
                 pintarAeropuerto = false;
-                imgTemporal = null;
-                juego.aeropuertosMapa.add(new Aeropuerto(rutaImagenTemporal, tipoAeropuerto, x, y));
             }
             // borra un aeropuerto antes pintado y lo elimina de la lista de aeropuertos
             if (cuadriculaBooleano && pintarBorradorTemporal) {
@@ -520,14 +531,22 @@ public class Configuracion extends BasicGameState {
         }
 // Fin eventos de click --------------------------------------------------------
     }
-    public boolean verificarOcupado(){
+
+    public boolean verificarOcupado(GameContainer container) {
+        pulsacionX = container.getInput().getMouseX();
+        pulsacionY = container.getInput().getMouseY();
+        pulsacion.setBounds(pulsacionX, pulsacionY, 2, 2);
+        System.out.println("Pulsacion en Verificar: x: " + pulsacion.x + " y: " + pulsacion.y);
+
         for (int i = 0; i < juego.aeropuertosMapa.size(); i++) {
-            if(juego.aeropuertosMapa.get(i).intersects(pulsacion)){
+            System.out.println("Evaluando: (" + juego.aeropuertosMapa.get(i).x + "-" + juego.aeropuertosMapa.get(i).y + ")");
+            if (juego.aeropuertosMapa.get(i).intersects(pulsacion)) {
                 System.out.println("entro a verificar ");
-              return true;  
-                
-            }   
+                return true;
+
+            }
         }
+
         return false;
     }
 }

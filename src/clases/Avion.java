@@ -53,7 +53,7 @@ public class Avion extends Rectangle {
      * @param ancho ancho del avión
      * @param alto alto del avión
      *
-     * Se carganen memoria las rutas dde los sprites del objeto avión
+     * Se cargaran en memoria las rutas dde los sprites del objeto avión
      */
     public Avion(int tipo, int x, int y) {
         super(x, y, 1, 1);
