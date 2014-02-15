@@ -20,7 +20,7 @@ public class Aeropuerto extends Rectangle {
     public int posicionEnGrafo;
 
     public Aeropuerto(String ruta, int tipo, int x, int y) {
-        super(x, y, 90, 90);
+        super(x, y, 30, 30);
         try {
             this.ruta = ruta;
 
